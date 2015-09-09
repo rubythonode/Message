@@ -1,0 +1,22 @@
+{
+    "name": "lavalite/message",
+    "description": "",
+    "authors": [
+        {
+            "name": "Lava Lite",
+            "email": "info@lavalite.org"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "classmap": [
+            "migrations"
+        ],
+        "psr-0": {
+            "Lavalite\\Message\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
