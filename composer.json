@@ -12,7 +12,7 @@
     },
     "autoload": {
         "classmap": [
-            "migrations"
+            "src"
         ],
         "psr-0": {
             "Lavalite\\Message\\": "src/"
