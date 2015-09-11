@@ -40,6 +40,10 @@ class MessageServiceProvider extends ServiceProvider {
             return $this->app->make('Lavalite\Message\Message');
         });
 
+        $this->app->bind(
+            'Lavalite\\Message\\Interfaces\\MessageRepositoryInterface',
+            'Lavalite\\Message\\Repositories\\Eloquent\\MessageRepository'
+        );
     }
 
     /**

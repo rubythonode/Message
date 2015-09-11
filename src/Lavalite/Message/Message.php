@@ -10,4 +10,16 @@ class Message
         $this->message     = $message;
     }
 
+    /**
+     * Display message of the user
+     *
+     * @return void
+     *
+     * @author
+     **/
+    public function display($view)
+    {
+        return view('message::admin.message.'. $view);
+    }
+
 }
