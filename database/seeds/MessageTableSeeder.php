@@ -2,6 +2,7 @@
 
 namespace Lavalite\Message;
 
+use DB;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,16 @@ class MessageTableSeeder extends Seeder
             // Uncomment  and edit this section for entering value to message table.
             /*
             array(
-                'name'      => 'Some name',
+               "id"        => "Id",
+               "from"        => "From",
+               "to"        => "To",
+               "subject"        => "Subject",
+               "message"        => "Message",
+               "read"        => "Read",
+               "type"        => "Type",
+               "deleted_at"        => "Deleted at",
+               "created_at"        => "Created at",
+               "updated_at"        => "Updated at",
             ),
             */
 

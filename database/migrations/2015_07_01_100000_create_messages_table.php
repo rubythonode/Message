@@ -13,15 +13,17 @@ class CreateMessagesTable extends Migration {
          public function up()
          {
 
-	    /**
-	     * Table: pages
-	     */
-	       Schema::create('messages', function($table) {
+            /**
+             * Table: messages
+             */
+            Schema::create('messages', function($table) {
                 $table->increments('id')->unsigned();
-                $table->string('name', 50)->nullable();
-                $table->string('slug', 50)->nullable();
-                $table->integer('order')->nullable();
-                $table->boolean('status')->default("1");
+                $table->integer('from')->nullable();
+                $table->integer('to')->nullable();
+                $table->string('subject')->nullable();
+                $table->text('message')->nullable();
+                $table->boolean('read')->nullable();
+                $table->enum('type',['System', 'Admin', 'User'])->nullable();
                 $table->string('upload_folder', 100)->nullable();
                 $table->softDeletes();
                 $table->nullableTimestamps();
@@ -35,7 +37,7 @@ class CreateMessagesTable extends Migration {
          */
          public function down()
          {
-	            Schema::drop('messages');
+                Schema::drop('messages');
          }
 
 }
