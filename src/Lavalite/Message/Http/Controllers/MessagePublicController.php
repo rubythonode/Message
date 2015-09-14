@@ -13,7 +13,7 @@ class PublicController extends CMSPublicController
      *
      * @return type
      */
-    public function __construct(\Lavalite\Message\Interfaces\MessageRepositiryInterface $message)
+    public function __construct(\Lavalite\Message\Interfaces\MessageRepositoryInterface $message)
     {
         $this->model = $message;
         parent::__construct();
