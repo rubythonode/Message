@@ -1,4 +1,6 @@
-<?php namespace Lavalite\Message\Facades;
+<?php
+
+namespace Lavalite\Message\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -9,6 +11,8 @@ class Message extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'message'; }
-
+    protected static function getFacadeAccessor()
+    {
+        return 'message';
+    }
 }

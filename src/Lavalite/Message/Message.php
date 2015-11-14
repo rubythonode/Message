@@ -1,17 +1,18 @@
-<?php namespace Lavalite\Message;
+<?php
+
+namespace Lavalite\Message;
 
 class Message
 {
-
     protected $message;
 
     public function __construct(\Lavalite\Message\Interfaces\MessageRepositoryInterface $message)
     {
-        $this->message     = $message;
+        $this->message = $message;
     }
 
     /**
-     * Display message of the user
+     * Display message of the user.
      *
      * @return void
      *
@@ -19,7 +20,6 @@ class Message
      **/
     public function display($view)
     {
-        return view('message::admin.message.'. $view);
+        return view('message::admin.message.'.$view);
     }
-
 }

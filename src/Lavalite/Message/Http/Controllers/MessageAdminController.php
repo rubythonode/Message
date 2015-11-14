@@ -2,24 +2,22 @@
 
 namespace Lavalite\Message\Http\Controllers;
 
-use Former;
-use Response;
 use App\Http\Controllers\AdminController as AdminController;
-
+use Former;
 use Lavalite\Message\Http\Requests\MessageRequest;
 use Lavalite\Message\Interfaces\MessageRepositoryInterface;
+use Response;
 
 /**
  *
- * @package Messages
  */
-
 class MessageAdminController extends AdminController
 {
-
     /**
-     * Initialize message controller
+     * Initialize message controller.
+     *
      * @param type MessageRepositoryInterface $message
+     *
      * @return type
      */
     public function __construct(MessageRepositoryInterface $message)
@@ -43,7 +41,7 @@ class MessageAdminController extends AdminController
     /**
      * Return list of message as json.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -54,14 +52,14 @@ class MessageAdminController extends AdminController
             $array[$key] = array_only($row, config('package.message.message.listfields'));
         }
 
-        return array('data' => $array);
+        return ['data' => $array];
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
      *
      * @return Response
      */
@@ -77,7 +75,8 @@ class MessageAdminController extends AdminController
     /**
      * Show the form for creating a new resource.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function create(MessageRequest $request)
@@ -91,7 +90,8 @@ class MessageAdminController extends AdminController
     /**
      * Display the specified resource.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      */
     public function store(MessageRequest $request)
@@ -106,8 +106,9 @@ class MessageAdminController extends AdminController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
+     *
      * @return Response
      */
     public function edit(MessageRequest $request, $id)
@@ -122,8 +123,9 @@ class MessageAdminController extends AdminController
     /**
      * Update the specified resource.
      *
-     * @param  Request  $request
-     * @param  int  $id
+     * @param Request $request
+     * @param int     $id
+     *
      * @return Response
      */
     public function update(MessageRequest $request, $id)
@@ -138,13 +140,15 @@ class MessageAdminController extends AdminController
     /**
      * Remove the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return Response
      */
     public function destroy(MessageRequest $request, $id)
     {
         try {
             $this->model->delete($id);
+
             return Response::json(['message' => 'Message deleted sucessfully'.$id, 'type' => 'success', 'title' => 'Success'], 201);
         } catch (Exception $e) {
             return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);

@@ -4,5 +4,4 @@ namespace Lavalite\Message\Interfaces;
 
 interface MessageRepositoryInterface
 {
-
 }

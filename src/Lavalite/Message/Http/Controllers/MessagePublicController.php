@@ -4,11 +4,11 @@ namespace Lavalite\Message\Http\Controllers;
 
 use App\Http\Controllers\PublicController as CMSPublicController;
 
-class PublicController extends CMSPublicController
+class MessagePublicController extends CMSPublicController
 {
-
     /**
-     * Constructor
+     * Constructor.
+     *
      * @param type \Lavalite\Message\Interfaces\MessageRepositoryInterface $message
      *
      * @return type
@@ -20,7 +20,7 @@ class PublicController extends CMSPublicController
     }
 
     /**
-     * Show message's list
+     * Show message's list.
      *
      * @param string $slug
      *
@@ -34,7 +34,8 @@ class PublicController extends CMSPublicController
     }
 
     /**
-     * Show message
+     * Show message.
+     *
      * @param string $slug
      *
      * @return response

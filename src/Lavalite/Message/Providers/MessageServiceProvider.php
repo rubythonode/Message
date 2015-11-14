@@ -4,8 +4,8 @@ namespace Lavalite\Message\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class MessageServiceProvider extends ServiceProvider {
-
+class MessageServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -26,7 +26,7 @@ class MessageServiceProvider extends ServiceProvider {
         $this->publishResources();
         $this->publishMigrations();
 
-        include __DIR__ . '/../Http/routes.php';
+        include __DIR__.'/../Http/routes.php';
     }
 
     /**
@@ -53,13 +53,13 @@ class MessageServiceProvider extends ServiceProvider {
      */
     public function provides()
     {
-        return array('message');
+        return ['message'];
     }
 
     /**
      * Publish resources.
      *
-     * @return  void
+     * @return void
      */
     private function publishResources()
     {
@@ -71,13 +71,11 @@ class MessageServiceProvider extends ServiceProvider {
     /**
      * Publish migration and seeds.
      *
-     * @return  void
+     * @return void
      */
     private function publishMigrations()
     {
         $this->publishes([__DIR__.'/../../../../database/migrations/' => base_path('database/migrations')], 'migrations');
-        $this->publishes([__DIR__.'/../../../../database/seeds/' => base_path('database/seeds')], 'seeds');
+        $this->publishes([__DIR__.'/../../../../database/seeds/'      => base_path('database/seeds')], 'seeds');
     }
-
-
 }

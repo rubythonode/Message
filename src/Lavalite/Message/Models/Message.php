@@ -2,10 +2,9 @@
 
 namespace Lavalite\Message\Models;
 
-use Lavalite\Filer\FilerTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Lavalite\Filer\FilerTrait;
 
 class Message extends Model
 {
@@ -15,7 +14,7 @@ class Message extends Model
     protected $dates = ['deleted_at'];
 
     /**
-     * Initialiaze page modal
+     * Initialiaze page modal.
      *
      * @param $name
      */
@@ -32,10 +31,9 @@ class Message extends Model
      */
     public function initialize()
     {
-        $this->fillable             = config('package.message.message.fillable');
-        $this->uploads              = config('package.message.message.uploadable');
-        $this->uploadRootFolder     = config('package.message.message.upload_root_folder');
-        $this->table                = config('package.message.message.table');
+        $this->fillable = config('package.message.message.fillable');
+        $this->uploads = config('package.message.message.uploadable');
+        $this->uploadRootFolder = config('package.message.message.upload_root_folder');
+        $this->table = config('package.message.message.table');
     }
-
 }

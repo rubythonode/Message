@@ -4,118 +4,135 @@ namespace Lavalite\Message\Interfaces;
 
 interface BaseRepositoryInterface
 {
-
     /**
-     * Retrieve all data of modal
+     * Retrieve all data of modal.
      *
      * @param array $columns
+     *
      * @return mixed
      */
-    public function all($columns = array('*'));
+    public function all($columns = ['*']);
 
     /**
-     * Retrieve all data of modal
+     * Retrieve all data of modal.
      *
      * @param array $columns
+     *
      * @return mixed
      */
-    public function json($columns = array('*'));
+    public function json($columns = ['*']);
 
     /**
-     * Retrieve all data of modal, paginated
-     * @param null $limit
+     * Retrieve all data of modal, paginated.
+     *
+     * @param null  $limit
      * @param array $columns
+     *
      * @return mixed
      */
-    public function paginate($limit = null, $columns = array('*'));
+    public function paginate($limit = null, $columns = ['*']);
 
     /**
-     * Retrieve data of modal, as key value
-     * @param null $limit
+     * Retrieve data of modal, as key value.
+     *
+     * @param null  $limit
      * @param array $columns
+     *
      * @return mixed
      */
     public function lists($val, $key = null);
 
     /**
-     * Find data by id
+     * Find data by id.
      *
      * @param $id
      * @param array $columns
+     *
      * @return mixed
      */
-    public function find($id, $columns = array('*'));
+    public function find($id, $columns = ['*']);
 
     /**
      * Find data by id and return new instance if not found.
      *
      * @param $id
      * @param array $columns
+     *
      * @return mixed
      */
-    public function findOrNew($id, $columns = array('*'));
+    public function findOrNew($id, $columns = ['*']);
 
     /**
-     * Find data by field and value
+     * Find data by field and value.
      *
      * @param $field
      * @param $value
      * @param array $columns
+     *
      * @return mixed
      */
-    public function findByField($field, $value = null, $columns = array('*'));
+    public function findByField($field, $value = null, $columns = ['*']);
+
     /**
-     * Find data by multiple fields
+     * Find data by multiple fields.
      *
      * @param array $where
      * @param array $columns
+     *
      * @return mixed
      */
-    public function findWhere( array $where , $columns = array('*'));
+    public function findWhere(array $where, $columns = ['*']);
 
     /**
-     * Find data by multiple values in one field
+     * Find data by multiple values in one field.
      *
      * @param $field
      * @param array $values
      * @param array $columns
+     *
      * @return mixed
      */
-    public function findWhereIn( $field, array $values, $columns = array('*'));
+    public function findWhereIn($field, array $values, $columns = ['*']);
 
     /**
-     * Find data by excluding multiple values in one field
+     * Find data by excluding multiple values in one field.
      *
      * @param $field
      * @param array $values
      * @param array $columns
+     *
      * @return mixed
      */
-    public function findWhereNotIn( $field, array $values, $columns = array('*'));
+    public function findWhereNotIn($field, array $values, $columns = ['*']);
 
     /**
-     * Save a new entity in modal
+     * Save a new entity in modal.
+     *
+     * @param array $attributes
      *
      * @throws ValidatorException
-     * @param array $attributes
+     *
      * @return mixed
      */
     public function create(array $attributes);
 
     /**
-     * Update a entity in modal by id
+     * Update a entity in modal by id.
      *
-     * @throws ValidatorException
      * @param array $attributes
      * @param $id
+     *
+     * @throws ValidatorException
+     *
      * @return mixed
      */
     public function update(array $attributes, $id);
 
     /**
-     * Delete a entity in modal by id
+     * Delete a entity in modal by id.
      *
      * @param $id
+     *
      * @return int
      */
     public function delete($id);
@@ -156,7 +173,7 @@ interface BaseRepositoryInterface
      * Add whereBetween condition for next query.
      *
      * @param string $column
-     * @param array $value
+     * @param array  $value
      *
      * @return void
      */
@@ -166,7 +183,7 @@ interface BaseRepositoryInterface
      * Add whereNotBetween condition for next query.
      *
      * @param string $column
-     * @param array $value
+     * @param array  $value
      *
      * @return void
      */
@@ -176,7 +193,7 @@ interface BaseRepositoryInterface
      * Add whereIn condition for next query.
      *
      * @param string $column
-     * @param array $value
+     * @param array  $value
      *
      * @return void
      */
@@ -186,7 +203,7 @@ interface BaseRepositoryInterface
      * Add whereNotIn condition for next query.
      *
      * @param string $column
-     * @param array $value
+     * @param array  $value
      *
      * @return void
      */
@@ -211,27 +228,29 @@ interface BaseRepositoryInterface
     public function whereNotNull($column);
 
     /**
-     * Load relations
+     * Load relations.
      *
      * @param array|string $relations
+     *
      * @return $this
      */
     public function with($relations);
+
     /**
-     * Set hidden fields
+     * Set hidden fields.
      *
      * @param array $fields
+     *
      * @return $this
      */
     public function hidden(array $fields);
 
-
     /**
-     * Set visible fields
+     * Set visible fields.
      *
      * @param array $fields
+     *
      * @return $this
      */
     public function visible(array $fields);
-
 }
