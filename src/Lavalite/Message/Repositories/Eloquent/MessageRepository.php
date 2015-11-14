@@ -7,12 +7,12 @@ use Lavalite\Message\Interfaces\MessageRepositoryInterface;
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {
     /**
-     * Specify Model class name
+     * Specify Model class name.
      *
      * @return string
      */
-    function model()
+    public function model()
     {
-        return "Lavalite\\Message\\Models\\Message";
+        return 'Lavalite\\Message\\Models\\Message';
     }
 }

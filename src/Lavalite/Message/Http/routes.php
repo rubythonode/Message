@@ -1,6 +1,6 @@
 <?php
-Route::group(array('prefix' =>'admin'), function ()
-{
+
+Route::group(['prefix' => 'admin'], function () {
     Route::get('/message/message/list', 'Lavalite\Message\Http\Controllers\MessageAdminController@lists');
     Route::resource('/message/message', 'Lavalite\Message\Http\Controllers\MessageAdminController');
 });

@@ -4,14 +4,12 @@ namespace Lavalite\Message;
 
 use DB;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
 
 class MessageTableSeeder extends Seeder
 {
-
     public function run()
     {
-        DB::table('messages')->insert(array(
+        DB::table('messages')->insert([
             // Uncomment  and edit this section for entering value to message table.
             /*
             array(
@@ -28,28 +26,28 @@ class MessageTableSeeder extends Seeder
             ),
             */
 
-        ));
+        ]);
 
-        DB::table('permissions')->insert(array(
-            array(
-                'name' => 'message.message.view',
-                'readable_name' => 'View Message'
-            ),
-            array(
-                'name' => 'message.message.create',
-                'readable_name' => 'Create Message'
-            ),
-            array(
-                'name' => 'message.message.edit',
-                'readable_name' => 'Update Message'
-            ),
-            array(
-                'name' => 'message.message.delete',
-                'readable_name' => 'Delete Message'
-            )
-        ));
+        DB::table('permissions')->insert([
+            [
+                'name'          => 'message.message.view',
+                'readable_name' => 'View Message',
+            ],
+            [
+                'name'          => 'message.message.create',
+                'readable_name' => 'Create Message',
+            ],
+            [
+                'name'          => 'message.message.edit',
+                'readable_name' => 'Update Message',
+            ],
+            [
+                'name'          => 'message.message.delete',
+                'readable_name' => 'Delete Message',
+            ],
+        ]);
 
-        DB::table('settings')->insert(array(
+        DB::table('settings')->insert([
             // Uncomment  and edit this section for entering value to settings table.
             /*
             array(
@@ -59,6 +57,6 @@ class MessageTableSeeder extends Seeder
                 'type'     => 'Default',
             ),
             */
-        ));
+        ]);
     }
 }
