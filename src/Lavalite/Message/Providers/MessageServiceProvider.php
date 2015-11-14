@@ -63,7 +63,7 @@ class MessageServiceProvider extends ServiceProvider {
      */
     private function publishResources()
     {
-        $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('message.php')], 'config');
+        $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('package/message.php')], 'config');
 
         // Config merge add here
     }

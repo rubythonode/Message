@@ -32,10 +32,10 @@ class Message extends Model
      */
     public function initialize()
     {
-        $this->fillable             = config('message.message.fillable');
-        $this->uploads              = config('message.message.uploadable');
-        $this->uploadRootFolder     = config('message.message.upload_root_folder');
-        $this->table                = config('message.message.table');
+        $this->fillable             = config('package.message.message.fillable');
+        $this->uploads              = config('package.message.message.uploadable');
+        $this->uploadRootFolder     = config('package.message.message.upload_root_folder');
+        $this->table                = config('package.message.message.table');
     }
 
 }

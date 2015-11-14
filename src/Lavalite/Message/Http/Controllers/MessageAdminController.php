@@ -51,7 +51,7 @@ class MessageAdminController extends AdminController
     {
         $array = $this->model->json();
         foreach ($array as $key => $row) {
-            $array[$key] = array_only($row, config('message.message.listfields'));
+            $array[$key] = array_only($row, config('package.message.message.listfields'));
         }
 
         return array('data' => $array);
