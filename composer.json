@@ -1,6 +1,7 @@
 {
     "name": "lavalite/message",
     "description": "Message package for Lavalite framework",
+    "license": "MIT",
     "authors": [
         {
             "name": "Lava Lite",
@@ -8,7 +9,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=5.5.9"
     },
     "autoload": {
         "classmap": [
