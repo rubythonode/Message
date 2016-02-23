@@ -1,11 +1,11 @@
 <?php
 
-namespace Lavalite\Page\Http\Requests;
+namespace Lavalite\Message\Http\Requests;
 
 use App\Http\Requests\Request;
 use User;
 
-class PageUserRequest extends Request {
+class MessageUserRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
