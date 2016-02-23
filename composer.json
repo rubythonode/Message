@@ -16,7 +16,7 @@
             "src"
         ],
         "psr-4": {
-            "Lavalite\\Message\\": "src/"
+            "Lavalite\\Message\\": "src/Lavalite/Message"
         }
     },
     "minimum-stability": "dev"
