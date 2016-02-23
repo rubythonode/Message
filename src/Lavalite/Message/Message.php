@@ -22,4 +22,23 @@ class Message
     {
         return view('message::admin.message.'.$view);
     }
+    public function messages()
+    {
+        return  $this->message->messages();
+    }
+
+    public function count($slug)
+    {
+        return  $this->message->msgCount($slug);
+    }
+
+    public function unreadCount()
+    {
+        return  $this->message->unreadCount();
+    }
+
+    public function unread()
+    {
+        return  $this->message->unread();
+    }
 }

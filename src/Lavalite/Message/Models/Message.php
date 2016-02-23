@@ -2,38 +2,27 @@
 
 namespace Lavalite\Message\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Lavalite\Filer\FilerTrait;
+use Litepie\Database\Traits\Slugger;
+use Litepie\Database\Model;
+use Litepie\Filer\Traits\Filer;
+use Litepie\Hashids\Traits\Hashids;
+use Litepie\Trans\Traits\Trans;
+use Litepie\Revision\Traits\Revision;
 
 class Message extends Model
 {
-    use FilerTrait;
-    use SoftDeletes;
-
-    protected $dates = ['deleted_at'];
+    use Filer, SoftDeletes, Hashids, Slugger, Trans, Revision;
 
     /**
-     * Initialiaze page modal.
+     * Configuartion for the model.
      *
-     * @param $name
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->initialize();
-    }
+     * @var array
+    */
+    protected $config = 'package.message.message';
 
-    /**
-     * Initialize the modal variables.
-     *
-     * @return void
-     */
-    public function initialize()
+    public function user()
     {
-        $this->fillable = config('package.message.message.fillable');
-        $this->uploads = config('package.message.message.uploadable');
-        $this->uploadRootFolder = config('package.message.message.upload_root_folder');
-        $this->table = config('package.message.message.table');
+        return $this->belongsTo(config('auth.providers.users.model'),'user_id');
     }
 }

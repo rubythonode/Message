@@ -1,248 +1,316 @@
-@extends('admin::general.default')
+@extends('admin::curd.index')
 @section('heading')
-<i class="fa fa-file-text-o"></i> {!! trans('message::message.name') !!} <small> {!! trans('cms.manage') !!} {!! trans('message::message.names') !!}</small>
+<i class="fa fa-file-text-o">
+</i>
+{!! trans('message::message.name') !!}
+<small>
+    {!! trans('cms.manage') !!} {!! trans('message::message.names') !!}
+</small>
 @stop
-
 @section('title')
 {!! trans('message::message.names') !!}
 @stop
-
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li><a href="{!! URL::to('admin') !!}"><i class="fa fa-dashboard"></i> {!! trans('cms.home') !!} </a></li>
-    <li class="active">{!! trans('message::message.names') !!}</li>
+    <li>
+        <a href="{!!URL::to('admin')!!}">
+            <i class="fa fa-dashboard">
+            </i>
+            {!! trans('cms.home') !!}
+        </a>
+    </li>
+    <li class="active">
+        {!! trans('message::message.names') !!}
+    </li>
 </ol>
 @stop
-
-
+@section('entry')
+@stop
+@section('tools')
+@stop
 @section('content')
-<!-- Main content -->
-          <div class="row">
-            <div class="col-md-3">
-              <a href="compose.html" class="btn btn-primary btn-block margin-bottom">Compose</a>
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Folders</h3>
-                  <div class="box-tools">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
+<div class="modal fade" id="compose-id">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">New Message</h4>
+            </div>
+            <div class="modal-body" >
+                {!!Form::vertical_open()
+                ->id('create-message-message')
+                ->method('POST')
+                ->files('true')
+                ->action(URL::to('admin/message/message'))!!}
+                {!! Form::hidden('status')
+                 -> forceValue("Sent")!!}
+                <div class='col-md-12 col-sm-12'>
+                       {!! Form::email('to')
+                        -> placeholder("To")
+                        -> required()
+                        -> raw()!!}
                 </div>
-                <div class="box-body no-padding">
-                  <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox <span class="label label-primary pull-right">12</span></a></li>
-                    <li><a href="#"><i class="fa fa-envelope-o"></i> Sent</a></li>
-                    <li><a href="#"><i class="fa fa-file-text-o"></i> Drafts</a></li>
-                    <li><a href="#"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a></li>
-                    <li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
-                  </ul>
-                </div><!-- /.box-body -->
-              </div><!-- /. box -->
-              <div class="box box-solid">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Labels</h3>
-                  <div class="box-tools">
-                    <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
+
+                <div class='col-md-12 col-sm-12'>
+                       {!! Form::text('subject')
+                        -> placeholder("Subject")
+                        -> required()                       
+                        -> raw()!!}
                 </div>
-                <div class="box-body no-padding">
-                  <ul class="nav nav-pills nav-stacked">
-                    <li><a href="#"><i class="fa fa-circle-o text-red"></i> Important</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> Promotions</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o text-light-blue"></i> Social</a></li>
-                  </ul>
-                </div><!-- /.box-body -->
-              </div><!-- /.box -->
-            </div><!-- /.col -->
-            <div class="col-md-9">
-              <div class="box box-primary">
-                <div class="box-header with-border">
-                  <h3 class="box-title">Inbox</h3>
-                  <div class="box-tools pull-right">
-                    <div class="has-feedback">
-                      <input type="text" class="form-control input-sm" placeholder="Search Mail">
-                      <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                    </div>
-                  </div><!-- /.box-tools -->
-                </div><!-- /.box-header -->
-                <div class="box-body no-padding">
-                  <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
-                    <div class="btn-group">
-                      <button class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                      <button class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                      <button class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
-                    </div><!-- /.btn-group -->
-                    <button class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                    <div class="pull-right">
-                      1-50/200
-                      <div class="btn-group">
-                        <button class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                        <button class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
-                      </div><!-- /.btn-group -->
-                    </div><!-- /.pull-right -->
-                  </div>
-                  <div class="table-responsive mailbox-messages">
-                    <table class="table table-hover table-striped">
-                      <tbody>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">5 mins ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">28 mins ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">11 hours ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">15 hours ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">Yesterday</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">2 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">2 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">2 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">2 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">2 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">4 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"></td>
-                          <td class="mailbox-date">12 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star-o text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">12 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">14 days ago</td>
-                        </tr>
-                        <tr>
-                          <td><input type="checkbox"></td>
-                          <td class="mailbox-star"><a href="#"><i class="fa fa-star text-yellow"></i></a></td>
-                          <td class="mailbox-name"><a href="read-mail.html">Alexander Pierce</a></td>
-                          <td class="mailbox-subject"><b>AdminLTE 2.0 Issue</b> - Trying to find a solution to this problem...</td>
-                          <td class="mailbox-attachment"><i class="fa fa-paperclip"></i></td>
-                          <td class="mailbox-date">15 days ago</td>
-                        </tr>
-                      </tbody>
-                    </table><!-- /.table -->
-                  </div><!-- /.mail-box-messages -->
-                </div><!-- /.box-body -->
-                <div class="box-footer no-padding">
-                  <div class="mailbox-controls">
-                    <!-- Check all button -->
-                    <button class="btn btn-default btn-sm checkbox-toggle"><i class="fa fa-square-o"></i></button>
-                    <div class="btn-group">
-                      <button class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i></button>
-                      <button class="btn btn-default btn-sm"><i class="fa fa-reply"></i></button>
-                      <button class="btn btn-default btn-sm"><i class="fa fa-share"></i></button>
-                    </div><!-- /.btn-group -->
-                    <button class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></button>
-                    <div class="pull-right">
-                      1-50/200
-                      <div class="btn-group">
-                        <button class="btn btn-default btn-sm"><i class="fa fa-chevron-left"></i></button>
-                        <button class="btn btn-default btn-sm"><i class="fa fa-chevron-right"></i></button>
-                      </div><!-- /.btn-group -->
-                    </div><!-- /.pull-right -->
-                  </div>
+
+                <div class='col-md-12 col-sm-12'>
+                    {!! Form::textarea ('message')
+                    -> placeholder("Message")
+                    -> required()
+                    -> rows(6)
+                    -> raw()!!}
                 </div>
-              </div><!-- /. box -->
-            </div><!-- /.col -->
-          </div><!-- /.row -->
+                {!! Form::close() !!}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btn-close">Close</button>
+                <button type="button" class="btn btn-primary" id="btn-send"><i class="fa fa-check"></i> Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <a href="#compose-id" class="btn btn-primary btn-block margin-bottom" data-toggle="modal">
+            Compose
+        </a>
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Folders
+                </h3>
+                <div class="box-tools">
+                    <button class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus">
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+
+
+            
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="cur">
+                        <a id="btn-inbox">
+                            <i class="fa fa-inbox">
+                            </i>
+                            Inbox
+                            <span class="label label-primary pull-right">
+                                {!!Message::count('Inbox')!!}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-sent">
+                            <i class="fa fa-envelope-o">
+                            </i>
+                            Sent
+                            <span class="label label-success pull-right">
+                                {!!Message::count('Sent')!!}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-draft">
+                            <i class="fa fa-file-text-o">
+                            </i>
+                            Drafts
+                            <span class="label label-default pull-right">
+                                {!!Message::count('Drafts')!!}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-junk">
+                            <i class="fa fa-filter">
+                            </i>
+                            Junk
+                            <span class="label label-warning pull-right">
+                                {!!Message::count('Junk')!!}
+                            </span>
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-trash">
+                            <i class="fa fa-trash-o">
+                            </i>
+                            Trash
+                            <span class="label label-danger pull-right">
+                                {!!Message::count('Trash')!!}
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /. box -->
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    Labels
+                </h3>
+                <div class="box-tools">
+                    <button class="btn btn-box-tool" data-widget="collapse">
+                        <i class="fa fa-minus">
+                        </i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body no-padding">
+                <ul class="nav nav-pills nav-stacked">
+                    <li class="cur">
+                        <a id="btn-Important">
+                            <i class="fa fa-circle-o text-red">
+                            </i>
+                            Important
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-Promotions">
+                            <i class="fa fa-circle-o text-yellow">
+                            </i>
+                            Promotions
+                        </a>
+                    </li>
+                    <li class="cur">
+                        <a id="btn-Social">
+                            <i class="fa fa-circle-o text-light-blue">
+                            </i>
+                            Social
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+    <!-- /.col -->
+
+    <div class="col-md-9">
+        <div id='entry-message'></div>
+    </div>
+    <!-- /.col -->
+</div>
+
 @stop
 @section('script')
+
     <script>
       $(function () {
-        //Enable iCheck plugin for checkboxes
-        //iCheck for checkbox and radio inputs
+        $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+         $('#btn-inbox').parent().addClass("active");
+        $('#btn-inbox').click(function(){
+           $(".cur").removeClass("active");
+           $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+        });
+
+        $('#btn-sent').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Sent')}}');
+        });
+
+        $('#btn-draft').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Draft')}}');
+        });
+
+        $('#btn-trash').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Trash')}}');
+        });
+
+        $('#btn-junk').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Junk')}}');
+        });
+
+        $('#btn-Important').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Important')}}');
+        });
+
+        $('#btn-Promotions').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Promotions')}}');
+        });
+
+        $('#btn-Social').click(function(){
+            $(".cur").removeClass("active");
+            $( this ).parent().addClass("active");
+            $('#entry-message').load('{{URL::to('admin/message/status/Social')}}');
+        });
+
+
+
+
+        $('#btn-send').click(function(){
+            $('#create-message-message').submit();
+        });
+
+        $('#btn-close').click(function(){
+            if ($("#to").val() == '') {
+                $('#compose-id').modal('hide');
+                return;
+            }
+            $("input:hidden[name=status]").val('Draft');
+            $('#create-message-message').submit();
+        });
+    
+        $('#create-message-message').submit( function( e ) {
+            if($('#create-message-message').valid() == false) {
+                toastr.error('Unprocessable entry.', 'Warning');
+                return false;
+            }
+            var url  = $(this).attr('action');
+            var formData = new FormData( this );
+
+            $.ajax( {
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend:function()
+                {
+                    $('#btn-send').prop('disabled',true);
+                    $('#btn-close').prop('disabled',true);
+                },
+                success:function(data, textStatus, jqXHR)
+                {
+                    $('#compose-id').modal('hide');
+                    $('#create-message-message').trigger('reset');
+                    $('#btn-send').prop('disabled',false);
+                    $('#btn-close').prop('disabled',false);
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    $('#btn-send').prop('disabled',false);
+                    $('#btn-close').prop('disabled',false);
+                }
+            });
+            e.preventDefault();
+        });
+
         $('.mailbox-messages input[type="checkbox"]').iCheck({
           checkboxClass: 'icheckbox_flat-blue',
           radioClass: 'iradio_flat-blue'
         });
 
-        //Enable check and uncheck all functionality
         $(".checkbox-toggle").click(function () {
           var clicks = $(this).data('clicks');
           if (clicks) {
@@ -276,9 +344,16 @@
             $this.toggleClass("fa-star-o");
           }
         });
+
+       
       });
     </script>
 @stop
-
 @section('style')
+<style type="text/css">
+
+    a{
+        cursor: pointer;
+    }
+</style>
 @stop

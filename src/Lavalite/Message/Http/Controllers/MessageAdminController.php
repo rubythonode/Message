@@ -3,11 +3,11 @@
 namespace Lavalite\Message\Http\Controllers;
 
 use App\Http\Controllers\AdminController as AdminController;
-use Former;
-use Lavalite\Message\Http\Requests\MessageRequest;
+use Form;
+use Lavalite\Message\Http\Requests\MessageAdminRequest;
 use Lavalite\Message\Interfaces\MessageRepositoryInterface;
-use Response;
-
+use Lavalite\Message\Models\Message;
+use User;
 /**
  *
  */
@@ -24,6 +24,7 @@ class MessageAdminController extends AdminController
     {
         $this->model = $message;
         parent::__construct();
+        
     }
 
     /**
@@ -31,30 +32,22 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function index(MessageRequest $request)
+    public function index(MessageAdminRequest $request)
     {
-        $this->theme->prependTitle(trans('message::message.names').' :: ');
+        // $messages  = $this->model->setPresenter('\\Lavalite\\Message\\Repositories\\Presenter\\MessageListPresenter')->paginate(NULL, ['*']);
+        $this   ->theme->prependTitle(trans('message::message.names').' :: ');
+        $view   = $this->theme->of('message::admin.message.index')->render();
 
-        return $this->theme->of('message::admin.message.index')->render();
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Message']);
+        // $this->responseData = $messages['data'];
+        // $this->responseMeta = $messages['meta'];
+        $this->responseView = $view;
+        $this->responseRedirect = '';
+        return $this->respond($request);
     }
 
-    /**
-     * Return list of message as json.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function lists(MessageRequest $request)
-    {
-        $array = $this->model->json();
-        foreach ($array as $key => $row) {
-            $array[$key] = array_only($row, config('package.message.message.listfields'));
-        }
-
-        return ['data' => $array];
-    }
-
+  
     /**
      * Display the specified resource.
      *
@@ -63,13 +56,26 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function show(MessageRequest $request, $id)
-    {
-        $message = $this->model->findOrNew($id);
+    public function show(MessageAdminRequest $request,Message $message)
+    {    
+        if (!$message->exists) {
+            $this->responseCode = 404;
+            $this->responseMessage = trans('messages.success.notfound', ['Module' => 'Message']);
+            $this->responseData = $message;
+            $this->responseView = view('message::admin.message.new');
+            return $this -> respond($request);
+        }
+        $messages['data'] = $this->model->findByStatus($status);
+        $messages['caption'] = $status;
 
-        Former::populate($message);
 
-        return view('message::admin.message.show', compact('message'));
+        Form::populate($message);
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Message']);
+        $this->responseData = $message;
+        // $this->responseView = view('message::admin.message.show', compact('message'));
+        $this->responseView = view('message::admin.message.show', compact('messages'));
+        return $this -> respond($request);
     }
 
     /**
@@ -79,12 +85,17 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function create(MessageRequest $request)
+    public function create(MessageAdminRequest $request)
     {
-        $message = $this->model->findOrNew(0);
-        Former::populate($message);
+        $message = $this->model->newInstance([]);
 
-        return view('message::admin.message.create', compact('message'));
+        Form::populate($message);
+
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Message']);
+        $this->responseData = $message;
+        $this->responseView = view('message::admin.message.create', compact('message'));
+        return $this -> respond($request);
     }
 
     /**
@@ -94,12 +105,39 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function store(MessageRequest $request)
-    {
-        if ($row = $this->model->create($request->all())) {
-            return Response::json(['message' => 'Message created sucessfully', 'type' => 'success', 'title' => 'Success'], 201);
-        } else {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+    public function store(MessageAdminRequest $request)
+    { 
+       try {
+            $attributes = $request->all();
+            $attributes['user_id'] =User::users('id');
+            $message = $this->model->create($attributes);
+
+            $flag = 0;
+            foreach (User::usersWithRole('admin') as $key => $value) {
+                if ($value->email == $request->get('to')){
+                    $flag = 1;
+                    break;
+                } 
+            }
+
+            if ($flag == 0) {
+                // Event::fire('message.sendMail', [$attributes]);
+                return;
+            } 
+
+            $this->responseCode = 201;
+            $this->responseMessage = trans('messages.success.created', ['Module' => 'Message']);
+            $this->responseData = $message;
+            $this->responseMeta = '';
+            $this->responseRedirect = trans_url('/admin/message/message/'.$message->getRouteKey());
+            $this->responseView = view('message::admin.message.create', compact('message'));
+
+            return $this -> respond($request);
+
+        } catch (Exception $e) {
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            return $this -> respond($request);
         }
     }
 
@@ -111,13 +149,15 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function edit(MessageRequest $request, $id)
+    public function edit(MessageAdminRequest $request, Message $message)
     {
-        $message = $this->model->find($id);
+        Form::populate($message);
+        $this->responseCode = 200;
+        $this->responseMessage = trans('messages.success.loaded', ['Module' => 'Message']);
+        $this->responseData = $message;
+        $this->responseView = view('message::admin.message.edit', compact('message'));
 
-        Former::populate($message);
-
-        return view('message::admin.message.edit', compact('message'));
+        return $this -> respond($request);
     }
 
     /**
@@ -128,12 +168,28 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function update(MessageRequest $request, $id)
-    {
-        if ($row = $this->model->update($request->all(), $id)) {
-            return Response::json(['message' => 'Message updated sucessfully', 'type' => 'success', 'title' => 'Success'], 201);
-        } else {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+    public function update(MessageAdminRequest $request, Message $message)
+    { 
+        try {
+
+            $attributes = $request->all();
+            $message->update($attributes);
+
+            $this->responseCode = 204;
+            $this->responseMessage = trans('messages.success.updated', ['Module' => 'Message']);
+            $this->responseData = $message;
+            $this->responseMeta = '';
+
+            $this->responseRedirect = trans_url('/admin/message/message/'.$message->getRouteKey());
+            return $this -> respond($request);
+
+        } catch (Exception $e) {
+
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            $this->responseRedirect = trans_url('/admin/message/message/'.$message->getRouteKey());
+
+            return $this -> respond($request);
         }
     }
 
@@ -144,14 +200,96 @@ class MessageAdminController extends AdminController
      *
      * @return Response
      */
-    public function destroy(MessageRequest $request, $id)
+    public function destroy(MessageAdminRequest $request, Message $message)
     {
-        try {
-            $this->model->delete($id);
+            try {
+                if (!empty($request->get('arrayIds'))) {
+                    $ids = $request->get('arrayIds');
+                    $t = $this->model->deleteMultiple($ids);
+                }else{
+                    $t = $message->delete();
+                }
 
-            return Response::json(['message' => 'Message deleted sucessfully'.$id, 'type' => 'success', 'title' => 'Success'], 201);
+            $this->responseCode = 202;
+            $this->responseMessage = trans('messages.success.deleted', ['Module' => 'Message']);
+            $this->responseData = $message;
+            $this->responseMeta = '';
+            $this->responseRedirect = trans_url('/admin/message/message/0');
+
+            return $this -> respond($request);
+
         } catch (Exception $e) {
-            return Response::json(['message' => $e->getMessage(), 'type' => 'error', 'title' => 'Error'], 400);
+
+            $this->responseCode = 400;
+            $this->responseMessage = $e->getMessage();
+            $this->responseRedirect = trans_url('/admin/message/message/'.$message->getRouteKey());
+
+            return $this -> respond($request);
+
         }
+    }
+
+
+
+
+    public function inbox(MessageAdminRequest $request)
+    {
+        $messages['data'] = $this->model->inbox();
+
+        return view('message::admin.message.show', compact('messages'));
+    }
+
+    public function search(MessageAdminRequest $request, $slug = 'none', $status = 'Inbox')
+    {
+
+        $messages['data'] = $this->model->search($status, $slug);
+
+        return view('message::admin.message.search', compact('messages'));
+    }
+
+    public function updateStatus(MessageAdminRequest $request, Message $message, $status)
+    {
+
+        try {
+            $Ids = $request->get('data');print_r($message);dd($message);
+            $attributes['status'] = $status;
+            if($Ids != null)
+            foreach ($Ids as $key => $id)
+            //$record = $this->records->findOrFail($id);
+            //$record = fill($attributes)->save();
+                $this->model->update($attributes,$id);
+            return ;
+        } catch (Exception $e) {
+            print_r($message);dd($message);
+            return $this->error($e->getMessage());
+        }
+        
+    }
+
+   
+   public function showMessage($status)
+    { 
+        $messages['data'] = $this->model->findByStatus($status);
+        $messages['caption'] = $status;
+        return view('message::admin.message.show', compact('messages'));
+    }
+
+     public function getDetails($id)
+    { 
+        $message = $this->model->getDetails($id);
+        return view('message::admin.message.details', compact('message'));
+    }
+
+    public function reply($id)
+    { 
+        $message = $this->model->getDetails($id);
+        return view('message::admin.message.reply',compact('message'));
+    }
+
+    public function forward($id)
+    { 
+        $message = $this->model->getDetails($id);
+        
+        return view('message::admin.message.forward',compact('message'));
     }
 }
