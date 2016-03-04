@@ -205,12 +205,12 @@
 
     <script>
       $(function () {
-        $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+        $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
          $('#btn-inbox').parent().addClass("active");
         $('#btn-inbox').click(function(){
            $(".cur").removeClass("active");
            $( this ).parent().addClass("active");
-            $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+            $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
         });
 
         $('#btn-sent').click(function(){

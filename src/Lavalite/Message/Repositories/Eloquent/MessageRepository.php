@@ -20,7 +20,6 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
 
     public function deleteMultiple($ids)
     {
-
         return $this->model->whereIn('id',$ids)->delete();
     }
 
@@ -39,10 +38,12 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
 
 	public function msgCount($slug)
     {
-        if ($slug == 'Inbox')
-            return $this->model->with('user')->whereTo(User::users('email'))->whereStatus('Sent')->orderBy('id','DESC')->count();
-
-        return $this->model->whereStatus($slug)->orderBy('id','DESC')->count();
+      
+            return $this->model->with('user')
+                                             ->whereStatus($slug)
+                                             ->where("read","=",NULL)
+                                             ->orderBy('id','DESC')
+                                             ->count();
     }
 
 
@@ -55,19 +56,14 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
     public function search($status, $slug)
     {
         
-        return $this->model->with('user')->where(function($query) use ($status){
-                                            if ($status == 'Inbox')
-                                                $query->where('to','=',User::users('email'));
-                                            else
-                                                $query->whereStatus($status);
-                                         })
-                                         ->where(function($query) use ($slug){
+        return $this->model->with('user')->where(function($query) use ($slug){
                                                 if ($slug != 'none') {
                                                     $query->orWhere('subject','LIKE','%'.$slug.'%');
                                                     $query->orWhere('message','LIKE','%'.$slug.'%');
                                                     $query->orWhere('created_at','LIKE','%'.$slug.'%');
                                                 }
                                              })
+                                         ->whereStatus($status)
                                          ->orderBy('id','DESC')
                                          ->paginate(10);
     }

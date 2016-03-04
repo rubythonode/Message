@@ -63,7 +63,7 @@
                         },
                         success:function(data, textStatus, jqXHR)
                         {
-                            $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+                            $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
                         },
                         error: function(jqXHR, textStatus, errorThrown)
                         {

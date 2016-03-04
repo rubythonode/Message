@@ -1,7 +1,7 @@
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            {!!$message['subject']!!}  <span class="lbl">{!!$message['status']!!}</span>
+            {!!$message['subject']!!}  <span class="lbl">{!!@$message['caption']!!}</span>
         </h3>
     </div>
     <!-- /.box-header -->
@@ -20,9 +20,9 @@
 
     <div class="box-body no-padding">
         <div class="mailbox-controls" >
-           
-            <div class="btn-group" id="{!!$message['id']!!}">
-                <button class="btn btn-default btn-sm btn-back" title="Back">
+          
+            <div class="btn-group" id="{!!$message->getRouteKey()!!}">
+                <button class="btn btn-default btn-sm btn-back" title="Back" id="{!!@$message['caption']!!}">
                     <i class="fa fa-long-arrow-left">
                     </i>
                 </button> 
@@ -46,7 +46,7 @@
                 </button>
            
             <!-- /.btn-group -->
-            <button class="btn btn-default btn-sm btn-refresh" title="Refresh">
+            <button class="btn btn-default btn-sm btn-refresh" title="Refresh" id="{!!$message['id']!!}">
                 <i class="fa fa-refresh">
                 </i>
             </button> 
@@ -78,8 +78,8 @@
     <!-- /.box-body -->
     <div class="box-footer no-padding" id="show-message">
         <div class="mailbox-controls" >
-            <div class="btn-group" id="{!!$message['id']!!}">
-               <button class="btn btn-default btn-sm btn-back" title="Back">
+            <div class="btn-group" id="{!!$message->getRouteKey()!!}">
+               <button class="btn btn-default btn-sm btn-back" title="Back" id="{!!$message['caption']!!}">
                     <i class="fa fa-long-arrow-left">
                     </i>
                 </button> 
@@ -99,7 +99,7 @@
                 <button class="btn btn-default btn-sm btn-forward"  id="{!!$message['id']!!}" title="Forward">
                     <i class="fa fa-share"></i>
                 </button>
-                <button class="btn btn-default btn-sm btn-refresh" title="Refresh">
+                <button class="btn btn-default btn-sm btn-refresh" title="Refresh" id="{!!$message['id']!!}">
                     <i class="fa fa-refresh">
                     </i>
                 </button>
@@ -161,7 +161,8 @@ $(document).ready(function(){
 
 
     $('.btn-trashed').click(function(){
-        
+        var arrayIds = [];
+        arrayIds.push($(this).parent().attr('id'));
         $.ajax( {
                 url: "{{URL::to('admin/message/message/status/Trash')}}",
                 type: 'GET',
@@ -170,8 +171,9 @@ $(document).ready(function(){
                 {
                 },
                 success:function(data, textStatus, jqXHR)
-                {
-                    location.reload();
+                { 
+                  var msgcaption = $(".btn-back").attr('id');
+                    $('#entry-message').load('{{Trans::to("admin/message/status")}}'+'/'+msgcaption);
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
@@ -180,13 +182,15 @@ $(document).ready(function(){
     });
 
     $(".btn-refresh").click(function(){
-        var msgid = $( this ).parent().attr('id');
-        $('#entry-message').load('{{URL::to('admin/message/details')}}'+'/'+msgid);
+        var msgid = $( this ).attr('id');
+        var caption = '{{@$message['caption']}}';
+        $('#entry-message').load('{{URL::to('admin/message/details/')}}'+'/'+caption+'/'+msgid);
     });
 
     $(".btn-back").click(function(){
-        var msgid = $( this ).parent().attr('id');
-        $('#entry-message').load('{{URL::to('admin/message/details')}}'+'/'+msgid);
+        var msgcaption = $( this ).attr('id');
+          $('#entry-message').load('{{Trans::to("admin/message/status")}}'+'/'+msgcaption);
+
     });
 
     $(".btn-reply").click(function(){

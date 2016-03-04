@@ -111,6 +111,10 @@ class MessageAdminController extends AdminController
             $attributes = $request->all();
             $attributes['user_id'] =User::users('id');
             $message = $this->model->create($attributes);
+            if($message->to == User::users('email')){
+              $attributes['status'] ="Inbox";
+              $message1 = $this->model->create($attributes);
+            }
 
             $flag = 0;
             foreach (User::usersWithRole('admin') as $key => $value) {
@@ -206,6 +210,7 @@ class MessageAdminController extends AdminController
                 if (!empty($request->get('arrayIds'))) {
                     $ids = $request->get('arrayIds');
                     $t = $this->model->deleteMultiple($ids);
+                    return $t;
                 }else{
                     $t = $message->delete();
                 }
@@ -251,7 +256,7 @@ class MessageAdminController extends AdminController
     {
 
         try {
-            $Ids = $request->get('data');print_r($message);dd($message);
+            $Ids = $request->get('data');
             $attributes['status'] = $status;
             if($Ids != null)
             foreach ($Ids as $key => $id)
@@ -260,7 +265,7 @@ class MessageAdminController extends AdminController
                 $this->model->update($attributes,$id);
             return ;
         } catch (Exception $e) {
-            print_r($message);dd($message);
+          
             return $this->error($e->getMessage());
         }
         
@@ -274,9 +279,10 @@ class MessageAdminController extends AdminController
         return view('message::admin.message.show', compact('messages'));
     }
 
-     public function getDetails($id)
+     public function getDetails($caption,$id)
     { 
         $message = $this->model->getDetails($id);
+        $message['caption'] =$caption;
         return view('message::admin.message.details', compact('message'));
     }
 
@@ -292,4 +298,25 @@ class MessageAdminController extends AdminController
         
         return view('message::admin.message.forward',compact('message'));
     }
+   /*   public function compose()
+    { 
+        return view('message::admin.message.compose');
+    }*/
+    public function changeSubStatus(MessageAdminRequest $request, Message $message)
+    { 
+       try {
+            $id = $request->get('id');
+            $sub = $request->get('substatus');
+            $attributes['sub_status'] = $sub;
+            $this->model->update($attributes,$id);
+            return;
+          }
+       catch (Exception $e) 
+          {
+          
+            return $this->error($e->getMessage());
+          }
+
+    }
+
 }

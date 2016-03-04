@@ -16,7 +16,7 @@ $time = ($time
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
-            {!! (!isset($messages['caption']))? 'Inbox' : $messages['caption']; !!}
+            {!! $messages['caption'] !!}
         </h3>
         <div class="pull-right">
             <div class="has-feedback">
@@ -66,11 +66,11 @@ $time = ($time
                     @forelse($messages['data'] as $key => $value)
                     <tr id="{!!$value->id!!}" class="check-read" data-status="{!!@$value->read!!}" style="background-color: {!!($value->read ==1)? '#f9f9f9' : '#fff';!!}">
                         <td>
-                            <input type="checkbox" name="listMessageID" class="checkbox1" value="{!!$value->getRouteKey()!!}" id="message_check_{!!$value->id!!}" />
+                            <input type="checkbox" name="listMessageID" class="checkbox1" value="{!! (@$messages['caption'] == 'Trash')? $value->id : $value->getRouteKey(); !!}" id="message_check_{!!$value->id!!}" />
                         </td>
-                        <td class="mailbox-star">
-                            <a class="btn-important">
-                                <i class="fa fa-star">
+                        <td class="mailbox-star" >
+                            <a class="btn-important" data-id="{!!$value->getRouteKey()!!}">
+                                <i class="fa fa-star @if($value->sub_status == 'starred') text-yellow @endif">
                                 </i>
                             </a>
                         </td>
@@ -161,7 +161,7 @@ $(document).ready(function(){
         var caption = '{{@$messages['caption']}}';
         $("#txt-search").val('');
         if (caption == ''){
-            $('#entry-message').load('{{URL::to('admin/message/message/Inbox')}}?type=inbox');
+            $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
             return;
         }
 
@@ -188,10 +188,8 @@ $(document).ready(function(){
                 data: {arrayIds},
                 success:function(data, textStatus, jqXHR)
                 {
-                    console.log(data);
-                    /*swal("Deleted!", data.message, "success");
+                    swal("Deleted!", data.message, "success");
                     $('#entry-message').load('{{URL::to('admin/message/status/Trash')}}');
-                    */
                 },
             });
         });
@@ -212,12 +210,35 @@ $(document).ready(function(){
     });
    
     $('.btn-important').click(function(){
+        var msg_id = $(this).attr('data-id');
+        var substatus;
         if ($(this).find('i').hasClass('text-yellow')){
             $(this).find('i').removeClass('text-yellow');
-            return;
+            //make sub status not important
+            substatus ="notstarred";
         }
-
+        else{
         $(this).find('i').addClass('text-yellow');
+        //make sub status important
+            substatus ="starred";
+        }
+            $.ajax( {
+                url: "{{URL::to('admin/message/important/substatus')}}",
+                type: 'GET',
+                data: {id:msg_id,substatus:substatus},
+                beforeSend:function()
+                {
+                },
+                success:function(data, textStatus, jqXHR)
+                {
+                    // location.reload();
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                }
+            });
+           
+
     });
     
     $('.btn-trashed').click(function(){
@@ -245,7 +266,10 @@ $(document).ready(function(){
  
   $('.single').click(function(){
               var msgid = $( this ).parent().attr('id');
-               $('#entry-message').load('{{URL::to('admin/message/details/')}}'+'/'+msgid);
+               var caption = '{{@$messages['caption']}}';
+               /*if(caption == '')
+                 caption = 'Inbox';*/
+               $('#entry-message').load('{{URL::to('admin/message/details/')}}'+'/'+caption+'/'+msgid);
         });
  
 
