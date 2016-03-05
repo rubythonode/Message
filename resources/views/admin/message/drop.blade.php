@@ -1,5 +1,5 @@
 <ul class="dropdown-menu">
-  <li class="header">  You have {!!Message::unreadCount()!!} messages</li>
+  <li class="header">  You have {!!Message::count('Inbox')!!} messages</li>
   <li>
     <!-- inner menu: contains the actual data -->
     <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 200px;"><ul class="menu" style="overflow: hidden; width: 100%; height: 200px;">

@@ -24,17 +24,16 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
     }
 
 
-    public function unread()
+     public function unread()
     {
         
-        return $this->model->with('user')->whereTo(User::users('email'))->whereSubStatus('unread')->orderBy('id','DESC')->get();
+        return $this->model->with('user')->whereStatus("Inbox")->where("read","=",NULL)->orderBy('id','DESC')->get();
     }
 
-    public function unreadCount()
-    {
-            
+   /* public function unreadCount()
+    { 
         return $this->model->with('user')->whereTo(User::users('email'))->whereSubStatus('unread')->count();
-    }
+    }*/
 
 	public function msgCount($slug)
     {
