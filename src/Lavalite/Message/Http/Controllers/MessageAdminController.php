@@ -306,8 +306,8 @@ class MessageAdminController extends AdminController
     { 
        try {
             $id = $request->get('id');
-            $sub = $request->get('substatus');
-            $attributes['sub_status'] = $sub;
+            $sub = $request->get('star');
+            $attributes['star'] = $sub;
             $this->model->update($attributes,$id);
             return;
           }

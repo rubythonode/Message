@@ -14,7 +14,7 @@
                    <small>
                        <i class="fa fa-clock-o">
                        </i>
-                       {!! humanTiming(strtotime(@$value['created_at'])) !!} ago
+                       <time class="timeago" datetime="{!!@$value['created_at']!!}"></time>
                    </small>
                </h4>
                <p>

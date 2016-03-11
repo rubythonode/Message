@@ -1,18 +1,4 @@
-<?php
-function humanTiming ($time)
-{
-$time = time() - $time; // to get the time since that moment
-$time = ($time
-<1)? 1 : $time;
-    $tokens = array (
-    31536000 => 'year', 2592000 => 'month', 604800 => 'week', 86400 => 'day', 3600 => 'hour', 60 => 'minute', 1 => 'second' );
-    foreach ($tokens as $unit => $text) {
-    if ($time < $unit) continue;
-    $numberOfUnits = floor($time / $unit);
-    return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
-    }
-    }
-?>
+
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
@@ -70,7 +56,7 @@ $time = ($time
                         </td>
                         <td class="mailbox-star" >
                             <a class="btn-important" data-id="{!!$value->getRouteKey()!!}">
-                                <i class="fa fa-star @if($value->sub_status == 'starred') text-yellow @endif">
+                                <i class="fa fa-star @if($value->star == 'Yes') text-yellow @endif">
                                 </i>
                             </a>
                         </td>
@@ -88,7 +74,7 @@ $time = ($time
                         <td class="mailbox-attachment single">
                         </td>
                         <td class="mailbox-date single">
-                        {!! humanTiming(strtotime(@$value['created_at'])) !!} ago
+                         <time class="timeago" datetime="{!!@$value['created_at']!!}"></time>
                         </td>
 
                     </tr>
@@ -211,21 +197,21 @@ $(document).ready(function(){
    
     $('.btn-important').click(function(){
         var msg_id = $(this).attr('data-id');
-        var substatus;
+        var star;
         if ($(this).find('i').hasClass('text-yellow')){
             $(this).find('i').removeClass('text-yellow');
             //make sub status not important
-            substatus ="notstarred";
+            star ="No";
         }
         else{
         $(this).find('i').addClass('text-yellow');
         //make sub status important
-            substatus ="starred";
+            star ="Yes";
         }
             $.ajax( {
                 url: "{{URL::to('admin/message/important/substatus')}}",
                 type: 'GET',
-                data: {id:msg_id,substatus:substatus},
+                data: {id:msg_id,star:star},
                 beforeSend:function()
                 {
                 },
@@ -272,6 +258,7 @@ $(document).ready(function(){
                $('#entry-message').load('{{URL::to('admin/message/details/')}}'+'/'+caption+'/'+msgid);
         });
  
-
+    jQuery("time.timeago").timeago();
 });
+
 </script>
