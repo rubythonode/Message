@@ -16,39 +16,29 @@ return [
 */
 'modules'   => ['message'],
 
-'image' => [
-            'xs'            => ['width' => '60',     'height' => '45',  'action' => 'resize', 'default' => 'images/noimage.jpg', 'watermark' => 'images/logo/default.png'],
-            'sm'            => ['width' => '160',    'height' => '75',  'action' => 'resize', 'default' => 'images/noimage.jpg', 'watermark' => 'images/logo/default.png'],
-            'md'            => ['width' => '460',    'height' => '345', 'action' => 'resize', 'default' => 'images/noimage.jpg', 'watermark' => 'images/logo/default.png'],
-            'lg'            => ['width' => '800',    'height' => '600', 'action' => 'resize', 'default' => 'images/noimage.jpg', 'watermark' => 'images/logo/default.png'],
-            'xl'            => ['width' => '1000',   'height' => '750', 'action' => 'resize', 'default' => 'images/noimage.jpg', 'watermark' => 'images/logo/default.png'],
-            ],
+'image'         => [
+    'xs'        => ['width' => '60',         'height' => '45'],
+    'sm'        => ['width' => '100',        'height' => '75'],
+    'md'        => ['width' => '460',        'height' => '345'],
+    'lg'        => ['width' => '800',        'height' => '600'],
+    'xl'        => ['width' => '1000',       'height' => '750'],
+    ],
 
-// Modale variables for message module.
 'message' => [
-                'model'         => 'Lavalite\Message\Models\Message',
-                'table'         => 'messages',
-                'primaryKey'    => 'id',
-                'hidden'        => [],
-                'visible'       => [],
-                'guarded'       => ['*'],
-                'slugs'         => [],
-                'dates'         => ['deleted_at','created_at','updated_at'],
-                'appends'       => ['eid'],
-                'fillable'      => ['user_id', 'status', 'star',  'from',  'to',  'subject',  'message',  'read',  'type'],
-                'listfields'    => ['id', 'status', 'star',  'from',  'to',  'subject',  'message',  'read',  'type'],
-                'uploadfolder'  => '/uploads/message/message',
-                'uploads'       => [
-                                        'single'   => [],
-                                        'multiple' => [],
-                                   ],
-                'casts'         => [
-                                   ],
-                'encrypt'       => ['id'],
-                'perPage'       => '20',
-
-
-           ],
-
-
+                    'model'             => 'Lavalite\Message\Models\Message',
+                    'table'             => 'messages',
+                    'hidden'            => [],
+                    'visible'           => [],
+                    'guarded'           => ['*'],
+                    'slugs'             => ['slug' => 'name'],
+                    'dates'             => ['deleted_at'],
+                    'appends'           => [],
+                    'fillable'          => ['user_id', 'status',  'star',  'from',  'to',  'subject',  'message',  'read',  'type'],
+                    'translatable'      => [],
+                    'upload-folder'     => '/uploads/message/message',
+                    'uploadable'        => [],
+                    'casts'             => [],
+                    'revision'          => [],
+                    'perPage'           => '20',
+                ],
 ];
