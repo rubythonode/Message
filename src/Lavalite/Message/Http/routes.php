@@ -1,32 +1,27 @@
 <?php
 
-Route::group(
-[
-'prefix' => Trans::setLocale().'/admin/message'
-],
-function () {
-   
-     Route::get('/message/sub/{slug}/{id}', 'MessageAdminController@updateSubStatus');
-     Route::get('/message/status/{slug}', 'MessageAdminController@updateStatus');
-     // Route::get('/message/Inbox', 'MessageAdminController@inbox');
-     // Route::get('/compose', 'MessageAdminController@compose');
-     Route::get('/search/{slug?}/{status?}', 'MessageAdminController@search'); 
-     Route::get('/status/{status?}','MessageAdminController@showMessage');
-     Route::get('/details/{caption}/{slug}', 'MessageAdminController@getDetails');
-     Route::get('/reply/{id}', 'MessageAdminController@reply');
-     Route::get('/forward/{id}', 'MessageAdminController@forward');
-     Route::resource('/message', 'MessageAdminController');
-     Route::get('/important/substatus', 'MessageAdminController@changeSubStatus');
+Route::group([
+    'prefix' => Trans::setLocale() . '/admin/message',
+], function () {
+
+    Route::get('/message/sub/{slug}/{id}', 'MessageAdminWebController@updateSubStatus');
+    Route::get('/message/status/{slug}', 'MessageAdminWebController@updateStatus');
+    // Route::get('/message/Inbox', 'MessageAdminWebController@inbox');
+    // Route::get('/compose', 'MessageAdminWebController@compose');
+    Route::get('/search/{slug?}/{status?}', 'MessageAdminWebController@search');
+    Route::get('/status/{status?}', 'MessageAdminWebController@showMessage');
+    Route::get('/details/{caption}/{slug}', 'MessageAdminWebController@getDetails');
+    Route::get('/reply/{id}', 'MessageAdminWebController@reply');
+    Route::get('/forward/{id}', 'MessageAdminWebController@forward');
+    Route::resource('/message', 'MessageAdminWebController');
+    Route::get('/important/substatus', 'MessageAdminWebController@changeSubStatus');
 });
 
-Route::group(
-[
-'prefix' => Trans::setLocale().'/user/message'
-],
-function () {
+Route::group([
+    'prefix' => Trans::setLocale() . '/user/message',
+], function () {
     Route::resource('message', 'MessageUserController');
 });
 
-
-Route::get('message', 'MessagePublicController@list');
-Route::get('message/{slug?}', 'MessagePublicController@details');
+Route::get('message', 'MessagePublicWebController@list');
+Route::get('message/{slug?}', 'MessagePublicWebController@details');

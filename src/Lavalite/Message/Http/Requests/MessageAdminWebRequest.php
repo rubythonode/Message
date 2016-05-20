@@ -4,7 +4,7 @@ namespace Lavalite\Message\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class MessageAdminRequest extends Request
+class MessageAdminWebRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

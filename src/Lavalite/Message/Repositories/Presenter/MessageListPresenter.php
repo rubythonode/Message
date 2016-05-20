@@ -2,9 +2,10 @@
 
 namespace Lavalite\Message\Repositories\Presenter;
 
-use Litepie\Database\Presenter\FractalPresenter;
+use Litepie\Repository\Presenter\FractalPresenter;
 
-class MessageListPresenter extends FractalPresenter {
+class MessageListPresenter extends FractalPresenter
+{
 
     /**
      * Prepare data to present

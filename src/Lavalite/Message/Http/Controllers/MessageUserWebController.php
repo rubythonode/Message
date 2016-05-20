@@ -2,15 +2,14 @@
 
 namespace Lavalite\Message\Http\Controllers;
 
-use App\Http\Controllers\UserController as UserController;
-use Former;
-use Lavalite\Message\Http\Requests\MessageUserRequest;
+use App\Http\Controllers\UserWebController as UserController;
+use Lavalite\Message\Http\Requests\MessageUserWebRequest;
 use Lavalite\Message\Interfaces\MessageRepositoryInterface;
 
 /**
  *
  */
-class MessageUserController extends UserController
+class MessageUserWebController extends UserController
 {
     /**
      * Initialize message controller.
@@ -31,10 +30,10 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function index(MessageUserRequest $request)
+    public function index(MessageUserWebRequest $request)
     {
         dd($this->model->paginate());
-        $this->theme->prependTitle(trans('message::message.names').' :: ');
+        $this->theme->prependTitle(trans('message::message.names') . ' :: ');
 
         return $this->theme->of('message::admin.message.index')->render();
     }
@@ -47,11 +46,12 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function show(MessageUserRequest $request, $id)
+    public function show(MessageUserWebRequest $request, $id)
     {
         $message = $this->model->find($id);
 
         if (empty($message)) {
+
             if ($request->wantsJson()) {
                 return [];
             }
@@ -75,7 +75,7 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function create(MessageUserRequest $request)
+    public function create(MessageUserWebRequest $request)
     {
         $message = $this->model->findOrNew(0);
 
@@ -91,16 +91,17 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function store(MessageUserRequest $request)
+    public function store(MessageUserWebRequest $request)
     {
         try {
             $attributes = $request->all();
-            $message = $this->model->create($attributes);
+            $message    = $this->model->create($attributes);
 
             return $this->success(trans('messages.success.created', ['Module' => 'Message']));
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
+
     }
 
     /**
@@ -111,7 +112,7 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function edit(MessageUserRequest $request, $id)
+    public function edit(MessageUserWebRequest $request, $id)
     {
         $message = $this->model->find($id);
 
@@ -128,16 +129,17 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function update(MessageUserRequest $request, $id)
+    public function update(MessageUserWebRequest $request, $id)
     {
         try {
             $attributes = $request->all();
-            $message = $this->model->update($attributes, $id);
+            $message    = $this->model->update($attributes, $id);
 
             return $this->success(trans('messages.success.updated', ['Module' => 'Message']));
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
+
     }
 
     /**
@@ -147,7 +149,7 @@ class MessageUserController extends UserController
      *
      * @return Response
      */
-    public function destroy(MessageUserRequest $request, $id)
+    public function destroy(MessageUserWebRequest $request, $id)
     {
         try {
             $this->model->delete($id);
@@ -156,5 +158,7 @@ class MessageUserController extends UserController
         } catch (Exception $e) {
             return $this->error($e->getMessage());
         }
+
     }
+
 }
