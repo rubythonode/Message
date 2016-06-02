@@ -20,8 +20,5 @@ Route::group([
 Route::group([
     'prefix' => Trans::setLocale() . '/user/message',
 ], function () {
-    Route::resource('message', 'MessageUserController');
+    Route::resource('message', 'MessageUserWebController');
 });
-
-Route::get('message', 'MessagePublicWebController@list');
-Route::get('message/{slug?}', 'MessagePublicWebController@details');
