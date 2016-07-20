@@ -1,8 +1,5 @@
 <?php
 
-namespace Lavalite\Message;
-
-use DB;
 use Illuminate\Database\Seeder;
 
 class MessageTableSeeder extends Seeder
@@ -12,19 +9,19 @@ class MessageTableSeeder extends Seeder
         DB::table('messages')->insert([
             // Uncomment  and edit this section for entering value to message table.
             /*
-            array(
-               "id"        => "Id",
-               "from"        => "From",
-               "to"        => "To",
-               "subject"        => "Subject",
-               "message"        => "Message",
-               "read"        => "Read",
-               "type"        => "Type",
-               "deleted_at"        => "Deleted at",
-               "created_at"        => "Created at",
-               "updated_at"        => "Updated at",
-            ),
-            */
+        array(
+        "id"        => "Id",
+        "from"        => "From",
+        "to"        => "To",
+        "subject"        => "Subject",
+        "message"        => "Message",
+        "read"        => "Read",
+        "type"        => "Type",
+        "deleted_at"        => "Deleted at",
+        "created_at"        => "Created at",
+        "updated_at"        => "Updated at",
+        ),
+         */
 
         ]);
 
@@ -50,13 +47,13 @@ class MessageTableSeeder extends Seeder
         DB::table('settings')->insert([
             // Uncomment  and edit this section for entering value to settings table.
             /*
-            array(
-                'key'      => 'message.message.key',
-                'name'     => 'Some name',
-                'value'    => 'Some value',
-                'type'     => 'Default',
-            ),
-            */
+        array(
+        'key'      => 'message.message.key',
+        'name'     => 'Some name',
+        'value'    => 'Some value',
+        'type'     => 'Default',
+        ),
+         */
         ]);
     }
 }
