@@ -1,3 +1,4 @@
+  {!! Form::hidden('upload_folder')!!}  
 <div class='col-md-4 col-sm-6'>
                        {!! Form::text('status')
                        -> label(trans('message::message.label.status'))

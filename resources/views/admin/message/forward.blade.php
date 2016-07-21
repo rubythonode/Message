@@ -11,10 +11,12 @@
                  	
                     <tr>
                         <td colspan="4">
-                            {!! Form::email('to')
-                            -> placeholder("To:")
-                            -> required()
-                            -> raw()!!}
+                        {!! Form::select('mails[]')
+                        -> options(trans('message::message.options.type'))
+                        -> class('js-example-tags select2-hidden-accessible')
+                        -> style('width:100%')
+                        -> multiple()
+                        -> required()!!}
                         </td>
                     </tr>
                             {!! Form::hidden('subject')
@@ -37,8 +39,13 @@
                 </tbody>
             </table>
             {!! Form::close() !!}
+            <link rel="stylesheet" type="text/css" href="https://select2.github.io/dist/css/select2.min.css">
+            <script type="text/javascript" src="https://select2.github.io/dist/js/select2.full.js"></script>       
 
             <script type="text/javascript">
+            $(".js-example-tags").select2({
+                  tags: true
+                });
             $(document).ready(function(){
                 $('#forward-send').click(function(){
                     $('#forward-message-message').submit();

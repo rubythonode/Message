@@ -13,6 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
+        // Bind Message policy
         \Lavalite\Message\Models\Message::class => \Lavalite\Message\Policies\MessagePolicy::class,
     ];
 

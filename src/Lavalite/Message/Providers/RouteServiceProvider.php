@@ -4,8 +4,8 @@ namespace Lavalite\Message\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
-use Request;
 use Lavalite\Message\Models\Message;
+use Request;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -21,18 +21,20 @@ class RouteServiceProvider extends ServiceProvider
     /**
      * Define your route model bindings, pattern filters, etc.
      *
-     * @param  \Illuminate\Routing\Router  $router
+     * @param   \Illuminate\Routing\Router  $router
      * @return void
      */
     public function boot(Router $router)
     {
         parent::boot($router);
-        if (Request::is('*admin/message/*')) {
+
+        if (Request::is('*/message/message/*')) {
             $router->bind('message', function ($id) {
                 $message = $this->app->make('\Lavalite\Message\Interfaces\MessageRepositoryInterface');
-                return $message->find($id);
+                return $message->findorNew($id);
             });
         }
+
     }
 
     /**
@@ -45,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map(Router $router)
     {
         $router->group(['namespace' => $this->namespace], function ($router) {
-            require __DIR__.'/../Http/routes.php';
+            require __DIR__ . '/../Http/routes.php';
         });
     }
 }

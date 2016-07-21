@@ -3,7 +3,7 @@
 namespace Lavalite\Message\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Lavalite\Message\Models\Message;
+
 class MessageServiceProvider extends ServiceProvider
 {
     /**
@@ -20,11 +20,16 @@ class MessageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-         $this->loadViewsFrom(__DIR__.'/../../../../resources/views', 'message');
+        // Load view
+        $this->loadViewsFrom(__DIR__ . '/../../../../resources/views', 'message');
 
-        $this->loadTranslationsFrom(__DIR__.'/../../../../resources/lang', 'message');
+        // Load translation
+        $this->loadTranslationsFrom(__DIR__ . '/../../../../resources/lang', 'message');
 
+        // Call pblish redources function
         $this->publishResources();
+
+        include __DIR__ . '/../Http/routes.php';
     }
 
     /**
@@ -34,10 +39,12 @@ class MessageServiceProvider extends ServiceProvider
      */
     public function register()
     {
-         $this->app->bind('message', function ($app) {
+        // Bind facade
+        $this->app->bind('message', function ($app) {
             return $this->app->make('Lavalite\Message\Message');
         });
 
+        // Bind Message to repository
         $this->app->bind(
             \Lavalite\Message\Interfaces\MessageRepositoryInterface::class,
             \Lavalite\Message\Repositories\Eloquent\MessageRepository::class
@@ -65,24 +72,19 @@ class MessageServiceProvider extends ServiceProvider
      */
     private function publishResources()
     {
-         // Publish configuration file
-        $this->publishes([__DIR__.'/../../../../config/config.php' => config_path('package/message.php')], 'config');
-
-        // Publish public view
-        $this->publishes([__DIR__.'/../../../../resources/views/public' => base_path('resources/views/vendor/message/public')], 'view-public');
+        // Publish configuration file
+        $this->publishes([__DIR__ . '/../../../../config/config.php' => config_path('package/message.php')], 'config');
 
         // Publish admin view
-        $this->publishes([__DIR__.'/../../../../resources/views/admin' => base_path('resources/views/vendor/message/admin')], 'view-admin');
+        $this->publishes([__DIR__ . '/../../../../resources/views' => base_path('resources/views/vendor/message')], 'view');
 
         // Publish language files
-        $this->publishes([__DIR__.'/../../../../resources/lang' => base_path('resources/lang/vendor/message')], 'lang');
+        $this->publishes([__DIR__ . '/../../../../resources/lang' => base_path('resources/lang/vendor/message')], 'lang');
 
         // Publish migrations
-        $this->publishes([__DIR__.'/../../../../database/migrations' => base_path('database/migrations')], 'migrations');
+        $this->publishes([__DIR__ . '/../../../../database/migrations/' => base_path('database/migrations')], 'migrations');
 
         // Publish seeds
-        $this->publishes([__DIR__.'/../../../../database/seeds' => base_path('database/seeds')], 'seeds');
+        $this->publishes([__DIR__ . '/../../../../database/seeds/' => base_path('database/seeds')], 'seeds');
     }
-
-
 }

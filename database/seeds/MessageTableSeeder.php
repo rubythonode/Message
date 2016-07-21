@@ -25,22 +25,50 @@ class MessageTableSeeder extends Seeder
 
         ]);
 
+        DB::table('menus')->insert([
+
+            [
+                'parent_id'   => 1,
+                'key'         => null,
+                'url'         => 'admin/message/message',
+                'name'        => 'Message',
+                'description' => null,
+                'icon'        => null,
+                'target'      => null,
+                'order'       => 1,
+                'status'      => 1,
+            ],
+
+            [
+                'parent_id'   => 2,
+                'key'         => null,
+                'url'         => 'user/message/message',
+                'name'        => 'Message',
+                'description' => null,
+                'icon'        => 'icon-envelope',
+                'target'      => null,
+                'order'       => 1,
+                'status'      => 1,
+            ],
+
+        ]);
+
         DB::table('permissions')->insert([
             [
-                'name'          => 'message.message.view',
-                'readable_name' => 'View Message',
+                'slug' => 'message.message.view',
+                'name' => 'View Message',
             ],
             [
-                'name'          => 'message.message.create',
-                'readable_name' => 'Create Message',
+                'slug' => 'message.message.create',
+                'name' => 'Create Message',
             ],
             [
-                'name'          => 'message.message.edit',
-                'readable_name' => 'Update Message',
+                'slug' => 'message.message.edit',
+                'name' => 'Update Message',
             ],
             [
-                'name'          => 'message.message.delete',
-                'readable_name' => 'Delete Message',
+                'slug' => 'message.message.delete',
+                'name' => 'Delete Message',
             ],
         ]);
 

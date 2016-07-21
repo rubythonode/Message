@@ -1,4 +1,3 @@
-
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title">
@@ -16,12 +15,12 @@
     <!-- /.box-header -->
     <div class="box-body no-padding">
         <div class="mailbox-controls">
-        
+
             <!-- Check all button -->
             <div class="btn-group">
                 <button class="btn btn-default btn-sm checkbox-toggle checkAll">
                     <i class="fa fa-square-o">
-                    </i> 
+                    </i>
                 </button>
                 @if(@$messages['caption'] == 'Trash')
                 <button class="btn btn-default btn-sm btn-deleted" title="Delete forever">
@@ -39,8 +38,8 @@
                 </button>
             </div>
             <!-- /.btn-group -->
-            
-          
+
+
             <div class="pull-right">
                @include('message::admin.message.pagination',['paginator' => $messages['data']])
             </div>
@@ -56,14 +55,13 @@
                         </td>
                         <td class="mailbox-star" >
                             <a class="btn-important" data-id="{!!$value->getRouteKey()!!}">
-                                <i class="fa fa-star @if($value->star == 'Yes') text-yellow @endif">
+                                <i class="fa fa-star @if($value->star == 1) text-yellow @endif">
                                 </i>
                             </a>
                         </td>
-                       
                         <td class="mailbox-name single">
                             <a href="#">
-                                {!!@$value->user->email!!}
+                                {!!@$value->name!!}
                             </a>
                         </td>
                         <td class="mailbox-subject single">
@@ -90,12 +88,12 @@
     <!-- /.box-body -->
     <div class="box-footer no-padding">
         <div class="mailbox-controls">
-        
+
             <!-- Check all button -->
             <div class="btn-group">
                 <button class="btn btn-default btn-sm checkbox-toggle checkAll">
                     <i class="fa fa-square-o">
-                    </i> 
+                    </i>
                 </button>
                 @if(@$messages['caption'] == 'Trash')
                 <button class="btn btn-default btn-sm btn-deleted" title="Delete forever">
@@ -113,8 +111,8 @@
                 </button>
             </div>
             <!-- /.btn-group -->
-            
-          
+
+
             <div class="pull-right">
                @include('message::admin.message.pagination',['paginator' => $messages['data']])
             </div>
@@ -139,7 +137,7 @@ $(document).ready(function(){
         var slug = $(this).val();
         if (slug == '')
             return;
-        
+
         $('#search-results').load('{{URL::to('admin/message/search')}}'+'/'+slug +'/{{@$messages['caption']}}');
     });
 
@@ -154,34 +152,6 @@ $(document).ready(function(){
         $('#entry-message').load('{{URL::to('admin/message/status')}}/{{@$messages['caption']}}');
     });
 
-    $(".btn-deleted").click(function(){
-        arrayIds = [];
-        $("input[id^='message_check_']:checked").each(function(){
-            arrayIds.push($(this).val());
-        }); 
-        swal({
-            title: "Are you sure?",
-            text: "You will not be able to recover this data!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
-        }, function(){
-            $.ajax({
-                url: "{{trans_url('admin/message/message/0')}}",
-                type: 'DELETE',
-                data: {arrayIds},
-                success:function(data, textStatus, jqXHR)
-                {
-                    swal("Deleted!", data.message, "success");
-                    $('#entry-message').load('{{URL::to('admin/message/status/Trash')}}');
-                },
-            });
-        });
-    });
-
-
     $(".checkAll").click(function(){
         if ($(".checkAll").hasClass('all_checked')) {
             $(".icheckbox_square-blue").removeClass('checked');
@@ -189,24 +159,24 @@ $(document).ready(function(){
             $(".checkAll").removeClass('all_checked');
             return;
         }
-        
+
        $(".icheckbox_square-blue").addClass('checked');
        $("input:checkbox").prop('checked', true);
        $(".checkAll").addClass('all_checked');
     });
-   
+
     $('.btn-important').click(function(){
         var msg_id = $(this).attr('data-id');
         var star;
         if ($(this).find('i').hasClass('text-yellow')){
             $(this).find('i').removeClass('text-yellow');
             //make sub status not important
-            star ="No";
+            star =0;
         }
         else{
         $(this).find('i').addClass('text-yellow');
         //make sub status important
-            star ="Yes";
+            star =1;
         }
             $.ajax( {
                 url: "{{URL::to('admin/message/important/substatus')}}",
@@ -217,18 +187,19 @@ $(document).ready(function(){
                 },
                 success:function(data, textStatus, jqXHR)
                 {
-                    // location.reload();
+
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
                 }
             });
-           
+
 
     });
-    
-    $('.btn-trashed').click(function(){
+
+    $(document).on("click",".btn-trashed",function(){
         var arrayIds = [];
+        var caption = '{{@$messages['caption']}}';
         $("input:checkbox[name=listMessageID]:checked").each(function(){
             arrayIds.push($(this).val());
             console.log($(this).val())
@@ -237,19 +208,49 @@ $(document).ready(function(){
                 url: "{{URL::to('admin/message/message/status/Trash')}}",
                 type: 'GET',
                 data: {data:arrayIds},
-                beforeSend:function()
-                {
-                },
                 success:function(data, textStatus, jqXHR)
                 {
-                    location.reload();
+                    console.log("trashed");
+                    $('#inbox_id').html(data.inbox_count);
+                    $('#trash_id').html(data.trash_count);
+                    $('#entry-message').load('{{URL::to('admin/message/status/')}}'+'/'+caption);
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
                 }
             });
     });
- 
+    $(document).on("click",".btn-deleted",function(){
+            arrayIds = [];
+            $("input[id^='message_check_']:checked").each(function(){
+                arrayIds.push($(this).val());
+            });
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to recover this data!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                closeOnConfirm: false
+            }, function(){
+                $.ajax({
+                    url: "{{trans_url('admin/message/message/0')}}",
+                    type: 'DELETE',
+                    data: {arrayIds},
+                    success:function(data, textStatus, jqXHR)
+                    {
+                        swal("Deleted!", data.message, "success");
+                        console.log("trashed");
+                        $('#entry-message').load('{{URL::to('admin/message/status/Trash')}}');
+                        $('#inbox_id').html(data.inbox_count);
+                        $('#trash_id').html(data.trash_count);
+
+                    },
+                });
+            });
+        });
+
   $('.single').click(function(){
               var msgid = $( this ).parent().attr('id');
                var caption = '{{@$messages['caption']}}';
@@ -257,7 +258,7 @@ $(document).ready(function(){
                  caption = 'Inbox';*/
                $('#entry-message').load('{{URL::to('admin/message/details/')}}'+'/'+caption+'/'+msgid);
         });
- 
+
     jQuery("time.timeago").timeago();
 });
 

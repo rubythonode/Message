@@ -1,4 +1,16 @@
 <div class='col-md-4 col-sm-6'>
+                       {!! Form::text('status')
+                       -> label(trans('message::message.label.status'))
+                       -> placeholder(trans('message::message.placeholder.status'))!!}
+                </div>
+
+                <div class='col-md-4 col-sm-6'>
+                       {!! Form::text('star')
+                       -> label(trans('message::message.label.star'))
+                       -> placeholder(trans('message::message.placeholder.star'))!!}
+                </div>
+
+                <div class='col-md-4 col-sm-6'>
                        {!! Form::text('from')
                        -> label(trans('message::message.label.from'))
                        -> placeholder(trans('message::message.placeholder.from'))!!}
@@ -17,9 +29,9 @@
                 </div>
 
                 <div class='col-md-4 col-sm-6'>
-                    {!! Form::textarea ('message')
-                    -> label(trans('message::message.label.message'))
-                    -> placeholder(trans('message::message.placeholder.message'))!!}
+                       {!! Form::text('message')
+                       -> label(trans('message::message.label.message'))
+                       -> placeholder(trans('message::message.placeholder.message'))!!}
                 </div>
 
                 <div class='col-md-4 col-sm-6'>

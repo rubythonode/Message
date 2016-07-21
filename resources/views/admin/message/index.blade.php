@@ -44,9 +44,13 @@
                 ->action(URL::to('admin/message/message'))!!}
                 {!! Form::hidden('status')
                  -> forceValue("Sent")!!}
+
                 <div class='col-md-12 col-sm-12'>
-                       {!! Form::email('to')
-                        -> placeholder("To")
+                  {!! Form::select('mails[]')
+                        -> options(trans('message::message.options.mails'))
+                        -> class('js-example-tags select2-hidden-accessible')
+                        -> style('width:100%')
+                        -> multiple()
                         -> required()
                         -> raw()!!}
                 </div>
@@ -65,6 +69,7 @@
                     -> rows(6)
                     -> raw()!!}
                 </div>
+                
                 {!! Form::close() !!}
             </div>
             <div class="modal-footer">
@@ -101,8 +106,8 @@
                             <i class="fa fa-inbox">
                             </i>
                             Inbox
-                            <span class="label label-primary pull-right">
-                                {!!Message::count('Inbox')!!}
+                            <span class="label label-primary pull-right" id="inbox_id">
+                                {!!Message::adminMsgcount('Inbox')!!}
                             </span>
                         </a>
                     </li>
@@ -111,9 +116,9 @@
                             <i class="fa fa-envelope-o">
                             </i>
                             Sent
-                            <span class="label label-success pull-right">
-                                {!!Message::count('Sent')!!}
-                            </span>
+                            <!-- <span class="label label-success pull-right" id="sent_id">
+                                {!!Message::adminMsgcount('Sent')!!}
+                            </span> -->
                         </a>
                     </li>
                     <li class="cur">
@@ -122,7 +127,7 @@
                             </i>
                             Drafts
                             <span class="label label-default pull-right">
-                                {!!Message::count('Drafts')!!}
+                                {!!Message::adminMsgcount('Drafts')!!}
                             </span>
                         </a>
                     </li>
@@ -132,7 +137,7 @@
                             </i>
                             Junk
                             <span class="label label-warning pull-right">
-                                {!!Message::count('Junk')!!}
+                                {!!Message::adminMsgcount('Junk')!!}
                             </span>
                         </a>
                     </li>
@@ -141,8 +146,8 @@
                             <i class="fa fa-trash-o">
                             </i>
                             Trash
-                            <span class="label label-danger pull-right">
-                                {!!Message::count('Trash')!!}
+                            <span class="label label-danger pull-right" id="trash_id">
+                                {!!Message::adminMsgcount('Trash')!!}
                             </span>
                         </a>
                     </li>
@@ -202,9 +207,15 @@
 
 @stop
 @section('script')
-
+    <link rel="stylesheet" type="text/css" href="https://select2.github.io/dist/css/select2.min.css">
+    <script type="text/javascript" src="https://select2.github.io/dist/js/select2.full.js"></script>
     <script>
       $(function () {
+
+        $(".js-example-tags").select2({
+          tags: true
+        });
+
         $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
          $('#btn-inbox').parent().addClass("active");
         $('#btn-inbox').click(function(){
@@ -240,7 +251,7 @@
         $('#btn-Important').click(function(){
             $(".cur").removeClass("active");
             $( this ).parent().addClass("active");
-            $('#entry-message').load('{{URL::to('admin/message/status/Important')}}');
+            $('#entry-message').load('{{URL::to('admin/message/starred')}}');
         });
 
         $('#btn-Promotions').click(function(){
@@ -254,9 +265,6 @@
             $( this ).parent().addClass("active");
             $('#entry-message').load('{{URL::to('admin/message/status/Social')}}');
         });
-
-
-
 
         $('#btn-send').click(function(){
             $('#create-message-message').submit();
@@ -296,6 +304,8 @@
                     $('#create-message-message').trigger('reset');
                     $('#btn-send').prop('disabled',false);
                     $('#btn-close').prop('disabled',false);
+                    $('#inbox_id').html(data.inbox_count);
+                    $('#trash_id').html(data.trash_count);                  
                 },
                 error: function(jqXHR, textStatus, errorThrown)
                 {
@@ -306,12 +316,12 @@
             e.preventDefault();
         });
 
-        $('.mailbox-messages input[type="checkbox"]').iCheck({
+       /* $('.mailbox-messages input[type="checkbox"]').iCheck({
           checkboxClass: 'icheckbox_flat-blue',
           radioClass: 'iradio_flat-blue'
-        });
+        });*/
 
-        $(".checkbox-toggle").click(function () {
+        /*$(".checkbox-toggle").click(function () {
           var clicks = $(this).data('clicks');
           if (clicks) {
             //Uncheck all checkboxes
@@ -323,7 +333,7 @@
             $(".fa", this).removeClass("fa-square-o").addClass('fa-check-square-o');
           }
           $(this).data("clicks", !clicks);
-        });
+        });*/
 
         //Handle starring for glyphicon and font awesome
         $(".mailbox-star").click(function (e) {
@@ -344,14 +354,12 @@
             $this.toggleClass("fa-star-o");
           }
         });
-
-       
+        
       });
     </script>
 @stop
 @section('style')
 <style type="text/css">
-
     a{
         cursor: pointer;
     }

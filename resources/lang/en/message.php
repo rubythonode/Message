@@ -2,40 +2,64 @@
 
 return [
 
-    'options'  => [
+    /**
+     * Singlular and plural name of the module
+     */
+    'name'          => 'Message',
+    'names'         => 'Messages',
 
+    /**
+     * Options for select/radio/check.
+     */
+    'options'       => [
+            'status'              => ['Draft','Inbox','Sent','Trash','Junk','Important','Promosions','Social'],
+            'star'                => ['Yes','No'],
+            'type'                => ['System','Admin','User'],
+            'mails'               => ['1'=>'superuser@superuser.com','2'=>'admin@admin.com','3'=>'user@admin.com','32'=>'anuja@renfos.com'],
     ],
 
-    'placeholder' => [
-
-       'id'         => 'Enter Id',
-'from'              => 'Enter From',
-'to'                => 'Enter To',
-'subject'           => 'Enter Subject',
-'message'           => 'Enter Message',
-'read'              => 'Enter Read',
-'type'              => 'Enter Type',
-'deleted_at'        => 'Enter Deleted at',
-'created_at'        => 'Enter Created at',
-'updated_at'        => 'Enter Updated at',
-
+    /**
+     * Placeholder for inputs
+     */
+    'placeholder'   => [
+        'status'                     => 'Please enter status',
+        'star'                       => 'Please enter star',
+        'from'                       => 'Please enter from',
+        'to'                         => 'Please enter to',
+        'subject'                    => 'Please enter subject',
+        'message'                    => 'Please enter message',
+        'read'                       => 'Please enter read',
+        'type'                       => 'Please enter type',
     ],
 
-    'label' => [
-
-        'id'        => 'Id',
-'from'              => 'From',
-'to'                => 'To',
-'subject'           => 'Subject',
-'message'           => 'Message',
-'read'              => 'Read',
-'type'              => 'Type',
-'deleted_at'        => 'Deleted at',
-'created_at'        => 'Created at',
-'updated_at'        => 'Updated at',
+    /**
+     * Labels for inputs.
+     */
+    'label'         => [
+        'status'                     => 'Status',
+        'star'                       => 'Star',
+        'from'                       => 'From',
+        'to'                         => 'To',
+        'subject'                    => 'Subject',
+        'message'                    => 'Message',
+        'read'                       => 'Read',
+        'type'                       => 'Type',
+        'status'                     => 'Status',
+        'created_at'                 => 'Created at',
+        'updated_at'                 => 'Updated at',
     ],
 
-    'name'            => 'Message',
-    'names'           => 'Messages',
+    /**
+     * Tab labels
+     */
+    'tab'           => [
+        'name'  => 'Name',
+    ],
 
+    /**
+     * Texts  for the module
+     */
+    'text'          => [
+        'preview' => 'Click on the below list for preview',
+    ],
 ];

@@ -9,12 +9,23 @@ use User;
 class MessageRepository extends BaseRepository implements MessageRepositoryInterface
 {
     /**
+     * Booting the repository.
+     *
+     * @return null
+     */
+    public function boot()
+    {
+        $this->pushCriteria(app('Litepie\Repository\Criteria\RequestCriteria'));
+    }
+
+    /**
      * Specify Model class name.
      *
      * @return string
      */
     public function model()
     {
+        $this->fieldSearchable = config('package.message.message.search');
         return config('package.message.message.model');
     }
 
@@ -29,25 +40,27 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
         return $this->model->with('user')->whereStatus("Inbox")->where("read", "=", null)->orderBy('id', 'DESC')->get();
     }
 
-    /* public function unreadCount()
+    public function messages()
     {
-    return $this->model->with('user')->whereTo(User::users('email'))->whereSubStatus('unread')->count();
-    }*/
+        $email = (User::check())?user()->email:user('admin.web')->email;
+
+        return $this->model->with('user')->whereTo($email)->whereStatus('Sent')->orderBy('id', 'DESC')->take(10)->get();
+    }
 
     public function msgCount($slug)
     {
-
+        $email = (User::check())?user()->email:user('admin.web')->email;
         return $this->model->with('user')
+            ->where(function($query) use($slug,$email){
+                if ($slug == 'Inbox') {
+                $query->whereTo($email);
+                }
+            })
             ->whereStatus($slug)
+            ->whereUserId(user_id())
             ->where("read", "=", null)
             ->orderBy('id', 'DESC')
             ->count();
-    }
-
-    public function messages()
-    {
-
-        return $this->model->with('user')->whereTo(User::users('email'))->whereStatus('Sent')->orderBy('id', 'DESC')->take(10)->get();
     }
 
     public function search($status, $slug)
@@ -69,18 +82,32 @@ class MessageRepository extends BaseRepository implements MessageRepositoryInter
 
     public function findByStatus($status)
     {
+        return $this->model
+            ->with('user')
+            ->whereStatus($status)
+            ->whereUserId(user_id('admin.web'))
+            ->orderBy('id', 'DESC')->paginate(10);
+    }
 
-        return $this->model->with('user')->whereStatus($status)->orderBy('id', 'DESC')->paginate(10);
+    public function getStarredMessages()
+    {
+        return $this->model
+            ->with('user')
+            ->whereStar("Yes")
+            ->where('status','<>',"Trash")
+            ->whereUserId(user_id('admin.web'))
+            ->orderBy('id', 'DESC')->paginate(10);
     }
 
     public function inbox()
     {
-        return $this->model->with('user')->whereTo(User::users('email'))->whereStatus('Sent')->orderBy('id', 'DESC')->paginate(10);
+        $email = (User::check())?user()->email:user('admin.web')->email;
+
+        return $this->model->with('user')->whereTo($email)->whereStatus('Sent')->orderBy('id', 'DESC')->paginate(10);
     }
 
     public function getDetails($id)
     {
-
         return $this->model->with('user')->whereId($id)->first();
     }
 

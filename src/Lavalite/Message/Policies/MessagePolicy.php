@@ -20,7 +20,7 @@ class MessagePolicy
      */
     public function view(User $user, Message $message)
     {
-        if ($user->canDo('message.message.view')) {
+        if ($user->canDo('message.message.view') && $user->is('admin')) {
             return true;
         }
 
@@ -50,7 +50,7 @@ class MessagePolicy
      */
     public function update(User $user, Message $message)
     {
-        if ($user->canDo('message.message.update')) {
+        if ($user->canDo('message.message.update') && $user->is('admin')) {
             return true;
         }
 
@@ -67,7 +67,7 @@ class MessagePolicy
      */
     public function destroy(User $user, Message $message)
     {
-        if ($user->canDo('message.message.delete')) {
+        if ($user->canDo('message.message.delete') && $user->is('admin')) {
             return true;
         }
 

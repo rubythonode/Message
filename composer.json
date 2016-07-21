@@ -1,10 +1,11 @@
 {
     "name": "lavalite/message",
-    "description": "Message package for Lavalite framework",
+    "description": "Message package for lavalite.",
+    "keywords": ["lavalite", "Message"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Lava Lite",
+            "name": "Lavalite",
             "email": "info@lavalite.org"
         }
     ],
@@ -12,9 +13,6 @@
         "php": ">=5.5.9"
     },
     "autoload": {
-        "classmap": [
-            "src"
-        ],
         "psr-4": {
             "Lavalite\\Message\\": "src/Lavalite/Message"
         }

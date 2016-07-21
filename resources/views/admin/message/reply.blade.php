@@ -19,6 +19,8 @@
                     </tr>
                             {!! Form::hidden('subject')
                             -> value("Re: ".$message['subject']) !!}
+                            {!! Form::hidden('mails[]')
+                            -> value($message['user']->id) !!}
                     <tr>
                         <td colspan="4">
                             {!! Form::textarea ('message')
@@ -64,6 +66,7 @@
                         success:function(data, textStatus, jqXHR)
                         {
                             $('#entry-message').load('{{URL::to('admin/message/status/Inbox')}}');
+                            location.reload();
                         },
                         error: function(jqXHR, textStatus, errorThrown)
                         {
