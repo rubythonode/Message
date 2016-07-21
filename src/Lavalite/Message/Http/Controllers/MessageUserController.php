@@ -89,21 +89,18 @@ class MessageUserController extends UserController
             $mails = $request->get('mails');
             $attributes = $request->all();
             $attributes['user_id'] = user_id('web');
-            $attributes['name'] = user()->name;
+            $attributes['name'] = userEmai()->name;
             $attributes['from'] = user()->email;   
 
-            foreach ($mails as $mail) {
-                $attributes['to'] = $mail; 
+            $attributes['to'] = implode(",", $mails); 
+            $attributes['status'] = $request->get('status');
+            $message = $this->repository->create($attributes);
 
-                //sent         
-                $attributes['status'] = $request->get('status');
-                $message = $this->repository->create($attributes);
-                //inbox
-                if($request->get('status') == 'Sent'){
+            if($request->get('status') == 'Sent'){
+                foreach ($mails as $mail) {
                     $attributes['status'] = "Inbox";
                     $message1 = $this->repository->create($attributes);
                 }
-
             }
 
             $sent_count = $this->repository->msgCount('Sent');

@@ -33,7 +33,7 @@ class MessageTableSeeder extends Seeder
                 'url'         => 'admin/message/message',
                 'name'        => 'Message',
                 'description' => null,
-                'icon'        => null,
+                'icon'        => 'fa fa-envelope-o',
                 'target'      => null,
                 'order'       => 1,
                 'status'      => 1,
