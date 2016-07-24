@@ -35,7 +35,7 @@ class MessageTableSeeder extends Seeder
                 'description' => null,
                 'icon'        => 'fa fa-envelope-o',
                 'target'      => null,
-                'order'       => 1,
+                'order'       => 180,
                 'status'      => 1,
             ],
 
@@ -47,7 +47,7 @@ class MessageTableSeeder extends Seeder
                 'description' => null,
                 'icon'        => 'icon-envelope',
                 'target'      => null,
-                'order'       => 1,
+                'order'       => 180,
                 'status'      => 1,
             ],
 
