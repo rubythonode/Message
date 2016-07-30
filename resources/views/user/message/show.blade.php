@@ -83,7 +83,7 @@
                             <i class="fa fa-paperclip"></i>
                         </td>
                         <td class="mailbox-date single">
-                         {!!@$value['created_at']!!}
+                         {!!format_date(@$value['created_at'])!!}
                         </td>
                     </tr>
                     @empty

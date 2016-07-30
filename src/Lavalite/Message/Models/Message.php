@@ -10,20 +10,21 @@ use Litepie\Hashids\Traits\Hashids;
 use Litepie\Repository\Traits\PresentableTrait;
 use Litepie\Revision\Traits\Revision;
 use Litepie\Trans\Traits\Trans;
+use Litepie\User\Traits\UserModel;
 
 class Message extends Model
 {
-    use Filer, SoftDeletes, Hashids, Slugger, Trans, Revision, PresentableTrait;
+    use Filer, SoftDeletes, Hashids, Slugger, Trans, Revision, PresentableTrait, UserModel;
 
     /**
      * Configuartion for the model.
      *
      * @var array
      */
-     protected $config = 'package.message.message';
+    protected $config = 'package.message.message';
 
-     public function user()
+    public function user()
     {
-        return $this->belongsTo(config('auth.providers.users.model'),'user_id');
+        return $this->belongsTo(config('auth.providers.users.model'), 'user_id');
     }
 }

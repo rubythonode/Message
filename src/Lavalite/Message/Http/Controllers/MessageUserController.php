@@ -89,18 +89,21 @@ class MessageUserController extends UserController
             $mails = $request->get('mails');
             $attributes = $request->all();
             $attributes['user_id'] = user_id('web');
-            $attributes['name'] = userEmai()->name;
-            $attributes['from'] = user()->email;   
+            $attributes['user_type'] = user_type();
+            $attributes['name'] = user()->name;
+            $attributes['from'] = user()->email;
 
-            $attributes['to'] = implode(",", $mails); 
+            $attributes['to'] = implode(",", $mails);
             $attributes['status'] = $request->get('status');
             $message = $this->repository->create($attributes);
 
-            if($request->get('status') == 'Sent'){
+            if ($request->get('status') == 'Sent') {
+
                 foreach ($mails as $mail) {
                     $attributes['status'] = "Inbox";
                     $message1 = $this->repository->create($attributes);
                 }
+
             }
 
             $sent_count = $this->repository->msgCount('Sent');
@@ -249,18 +252,19 @@ class MessageUserController extends UserController
 
     public function showMessage($status)
     {
-        
+
         $this->repository->pushCriteria(new \Lavalite\Message\Repositories\Criteria\MessageUserCriteria());
-        if($status == 'Inbox'){
+
+        if ($status == 'Inbox') {
             $messages['data'] = $this->repository->scopeQuery(function ($query) use ($status) {
                 return $query->with('user')->whereStatus($status)->whereTo(user()->email)->orderBy('id', 'DESC');
             })->paginate();
-        }else{
+        } else {
             $messages['data'] = $this->repository->scopeQuery(function ($query) use ($status) {
                 return $query->with('user')->whereStatus($status)->orderBy('id', 'DESC');
-            })->paginate();        
+            })->paginate();
         }
-            
+
         $messages['caption'] = $status;
         return view('message::user.message.show', compact('messages'));
     }

@@ -5,43 +5,42 @@ return [
     /**
      * Provider.
      */
-    'provider'  => 'lavalite',
+    'provider' => 'lavalite',
 
     /*
      * Package.
      */
-    'package'   => 'message',
+    'package'  => 'message',
 
     /*
      * Modules.
      */
-    'modules'   => ['message'],
+    'modules'  => ['message'],
 
+    'message'  => [
+        'model'         => 'Lavalite\Message\Models\Message',
+        'table'         => 'messages',
+        'presenter'     => \Lavalite\Message\Repositories\Presenter\MessageItemPresenter::class,
+        'hidden'        => [],
+        'visible'       => [],
+        'guarded'       => ['*'],
+        'slugs'         => ['slug' => 'name'],
+        'dates'         => ['deleted_at'],
+        'appends'       => [],
+        'fillable'      => ['user_id', 'user_type', 'status', 'star', 'from', 'to', 'subject', 'message', 'read', 'type', 'upload_folder'],
+        'translate'     => [],
 
-    'message'       => [
-        'model'             => 'Lavalite\Message\Models\Message',
-        'table'             => 'messages',
-        'presenter'         => \Lavalite\Message\Repositories\Presenter\MessageItemPresenter::class,
-        'hidden'            => [],
-        'visible'           => [],
-        'guarded'           => ['*'],
-        'slugs'             => ['slug' => 'name'],
-        'dates'             => ['deleted_at'],
-        'appends'           => [],
-        'fillable'          => ['user_id', 'status',  'star',  'from',  'to',  'subject',  'message',  'read',  'type','upload_folder'],
-        'translate'         => [],
-
-        'upload-folder'     => '/uploads/message/message',
-        'uploads'           => [
-                                    'single'    => [],
-                                    'multiple'  => [],
-                               ],
-        'casts'             => [
-                               ],
-        'revision'          => [],
-        'perPage'           => '20',
+        'upload_folder' => '/message/message',
+        'uploads'       => [
+            'single'   => [],
+            'multiple' => [],
+        ],
+        'casts'         => [
+        ],
+        'revision'      => [],
+        'perPage'       => '20',
         'search'        => [
-            'name'  => 'like',
+            'name' => 'like',
             'status',
         ],
     ],

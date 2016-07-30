@@ -7,7 +7,7 @@
        <li>
            <a href="{!!URL::to('/admin/message/message')!!}">
                <div class="pull-left">
-                   <img src="https://placeimg.com/80/80/people" class="img-circle" alt="User Image"/>
+                    <img src="{!!@$value->user->picture!!}" class="img-circle img-responsive" alt="User Image" />
                </div>
                <h4>
                    {!!@$value->user->name!!}

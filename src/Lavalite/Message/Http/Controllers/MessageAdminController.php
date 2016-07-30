@@ -52,7 +52,7 @@ class MessageAdminController extends BaseController
     public function index(MessageAdminRequest $request)
     {
         $pageLimit = $request->input('pageLimit');
-        
+
         $this->theme->asset()->add('select2-css', 'packages/select2/css/select2.min.css');
         $this->theme->asset()->container('extra')->add('select2-js', 'packages/select2/js/select2.full.js');
 
@@ -131,11 +131,13 @@ class MessageAdminController extends BaseController
                 $user = User::findUser($user_id);
                 //sent
                 $sent['user_id'] = user_id('admin.web');
+                $attributes['user_type'] = user_type();
                 $sent['to'] = $user['email'];
                 $message = $this->repository->create($sent);
 
                 //inbox
                 $inbox['user_id'] = $user_id;
+                $attributes['user_type'] = user_type();
                 $inbox['to'] = $user['email'];
                 $inbox['status'] = "Inbox";
                 $message1 = $this->repository->create($inbox);
