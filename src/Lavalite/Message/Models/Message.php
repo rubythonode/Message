@@ -10,7 +10,7 @@ use Litepie\Hashids\Traits\Hashids;
 use Litepie\Repository\Traits\PresentableTrait;
 use Litepie\Revision\Traits\Revision;
 use Litepie\Trans\Traits\Trans;
-use Litepie\User\Traits\UserModel;
+use Litepie\User\Traits\User as UserModel;
 
 class Message extends Model
 {
